@@ -1,0 +1,56 @@
+{
+  "ignorePatterns": ["node_modules/", "dist/"],
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "bin/**/*.ts",
+        "src/**/*.ts"
+      ]
+    }
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "eslint-comments"
+  ],
+  "rules": {
+    "eslint-comments/no-unlimited-disable": "error",
+    "eslint-comments/no-unused-disable": "error",
+    "eslint-comments/no-unused-enable": "error",
+    "eslint-comments/disable-enable-pair": "error",
+    "camelcase": "error",
+    "semi": [
+      "error",
+      "always"
+    ],
+    "quotes": [
+      "error",
+      "double"
+    ],
+    "no-console": "warn",
+    "no-unused-vars": "error",
+    "indent": [
+      "error",
+      4
+    ],
+    "max-len": [
+      "error",
+      {
+        "code": 80
+      }
+    ]
+  }
+}
