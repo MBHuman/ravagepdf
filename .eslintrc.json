@@ -1,5 +1,8 @@
 {
-  "ignorePatterns": ["node_modules/", "dist/"],
+  "ignorePatterns": [
+    "node_modules/",
+    "dist/"
+  ],
   "env": {
     "browser": true,
     "es2021": true
@@ -44,7 +47,7 @@
     "no-unused-vars": "error",
     "indent": [
       "error",
-      4
+      2
     ],
     "max-len": [
       "error",
