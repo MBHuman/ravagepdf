@@ -8,7 +8,10 @@
         "declaration": true,
     },
     "include": [
-        "src/**/*.ts",
+        "lib/**/*.ts",
         "bin/**/*.ts"
+    ],
+    "exclude": [
+        "./**/*.test.ts"
     ]
 }
