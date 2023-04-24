@@ -10,11 +10,6 @@
     "include": [
         "lib/**/*.ts",
         "bin/**/*.ts",
-        "tests/lib/types/localize.test.ts",
-        "tests/lib/types/pdfOptions.test.ts",
-        "tests/lib/types/pdfStyle.test.ts",
-        "tests/lib/structures/docGenerator.test.ts",
-        "tests/lib/structures/pdfDoc.test.ts"
     ],
     "exclude": [
         "./**/*.test.ts"

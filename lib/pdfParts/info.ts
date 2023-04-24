@@ -1,65 +1,78 @@
-import { Content } from "pdfmake/interfaces";
+import { Content, ContentStack } from "pdfmake/interfaces";
 import { PdfPartProcessor } from "./partProcessor";
 
 export class PdfPartInfo extends PdfPartProcessor {
 
   private async _genName(): Promise<Content> {
-    const contactName: Content = {
-      text: [
-        { text: `\n${this._localize.name}: `, style: ["b", "small"] },
-        { text: spec.info.contact.name, style: ["small"] },
-      ],
-    };
+    let contactName = {} as Content;
+    if (this._openapiTree.info.contact?.name) {
+      contactName = {
+        text: [
+          { text: `\n${this._localize.name}: `, style: ["b", "small"] },
+          { text: this._openapiTree.info.contact?.name, style: ["small"] },
+        ],
+      } as Content;
+    }
     return new Promise((resolve) => {
       resolve(contactName);
     });
   }
 
   private async _genEmail(): Promise<Content> {
-    const contactEmail: Content = {
-      text: [
-        { text: `\n${this._localize.email}: `, style: ["b", "small"] },
-        { text: spec.info.contact.email, style: ["small"] },
-      ],
-    };
+    let contactEmail = {} as Content;
+    if (this._openapiTree.info.contact?.email) {
+      contactEmail = {
+        text: [
+          { text: `\n${this._localize.email}: `, style: ["b", "small"] },
+          { text: this._openapiTree.info.contact?.email, style: ["small"] },
+        ],
+      } as Content;
+    }
     return new Promise((resolve) => {
       resolve(contactEmail);
     });
   }
 
   private async _genUrl(): Promise<Content> {
-    const contactUrl: Content = {
-      text: [
-        {
-          text: `\n${this._localize.url}: `,
-          style: ["b", "small"]
-        },
-        {
-          text: spec.info.contact.url,
-          style: ["small", "blue"],
-          link: spec.info.contact.url
-        },
-      ],
-    };
+    let contactUrl = {} as Content;
+
+    if (this._openapiTree.info.contact?.url) {
+      contactUrl = {
+        text: [
+          {
+            text: `\n${this._localize.url}: `,
+            style: ["b", "small"]
+          },
+          {
+            text: this._openapiTree.info.contact?.url,
+            style: ["small", "blue"],
+            link: this._openapiTree.info.contact?.url
+          },
+        ],
+      } as Content;
+    }
     return new Promise((resolve) => {
       resolve(contactUrl);
     });
   }
 
   private async _genTermsOfService(): Promise<Content> {
-    const termsOfService: Content = {
-      text: [
-        {
-          text: `\n${this._localize.termsOfService}: `,
-          style: ["b", "small"]
-        },
-        {
-          text: spec.info.termsOfService,
-          style: ["small", "blue"],
-          link: spec.info.termsOfService
-        },
-      ],
-    };
+    let termsOfService = {} as Content;
+    if (this._openapiTree.info.termsOfService) {
+      termsOfService = {
+        text: [
+          {
+            text: `\n${this._localize.termsOfService}: `,
+            style: ["b", "small"]
+          },
+          {
+            text: this._openapiTree.info.termsOfService,
+            style: ["small", "blue"],
+            link: this._openapiTree.info.termsOfService
+          },
+        ],
+      } as Content;
+    }
     return new Promise((resolve) => {
       resolve(termsOfService);
     });
@@ -77,24 +90,37 @@ export class PdfPartInfo extends PdfPartProcessor {
     });
   }
 
+  private async _genDescriptionFromMarkdown(): Promise<ContentStack> {
+    let content = {} as ContentStack;
+    if (this._openapiTree.info.description) {
+      content = {
+        stack: await this.markdownToPdfmake(this._openapiTree.info.description),
+        style: ["topMargin3"],
+      };
+    }
+    return new Promise((resolve) => {
+      resolve(content);
+    });
+  }
+
   async genDef(): Promise<Content[]> {
     const contactDef = await this._genContact();
-    const version = this._localize.apiVersion;
-    const infoVersion = this._localize.info.version;
+    const version = this._openapiTree.api.info.version;
+    const infoVersion = this._openapiTree.info.title;
     const content: Content[] = [
       {
-        text: bookTitle || this._localize.apiReference,
+        text: this._localize.apiReference,
         style: ["h2", "primary", "right", "b", "topMargin1"]
       },
-      spec.info.title ? {
-        text: spec.info.title,
+      this._openapiTree.info.title ? {
+        text: this._openapiTree.info.title,
         style: ["title", "right"]
       } : "",
-      spec.info.version ? {
+      this._openapiTree.info.version ? {
         text: `${version}: ${infoVersion}`,
         style: ["p", "b", "right", "alternate"]
       } : "",
-      specInfDescrMarkDef,
+      await this._genDescriptionFromMarkdown(),
       ...contactDef,
       { text: "", pageBreak: "after" },
     ];
@@ -109,7 +135,7 @@ export class PdfPartInfoEmpty extends PdfPartProcessor {
   async genDef(): Promise<Content[]> {
     const content: Content[] = [
       {
-        text: bookTitle || this._localize.apiReference,
+        text: this._localize.apiReference,
         style: ["h1", "bold", "primary", "right", "topMargin1"]
       },
       {

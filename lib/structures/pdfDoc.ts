@@ -1,66 +1,122 @@
 import { PdfStyle } from "../types/pdfStyle";
 import { PdfOptions } from "../types/pdfOptions";
-import { Content } from "pdfmake/interfaces";
-import { OpenapiTree } from "./openapiTree";
+import { OpenapiInfoV3 } from "./openapiInfo";
+import { PdfPartInfo, PdfPartProcessor } from "../pdfParts";
+import { writeFileSync } from "fs";
+import {
+  Content, TDocumentDefinitions,
+  StyleDictionary
+} from "pdfmake/interfaces";
+import PdfPrinter from "pdfmake";
 
+/**
+ * PDFDoc is class that builds pdf document from OpenAPI specification.
+ *
+ */
 export class PDFDoc {
-
+  private _pdfParts: PdfPartProcessor[];
   private _allContent: Content[];
-  private _infoDef: Content[];
-  private _tocDef: Content[];
-  private _securiyDef: Content[];
-  private _apiListDef: Content[];
-  private _apiDef: Content[];
-  private _styles?: PdfStyle;
-  private _options?: PdfOptions;
-  private _openapiTree: OpenapiTree;
+  private _styles: PdfStyle;
+  private _options: PdfOptions;
+  private _openapiTree: OpenapiInfoV3;
+  private _documentDef: TDocumentDefinitions;
+  private _doc: PDFKit.PDFDocument;
 
-  constructor(styles?: PdfStyle, options?: PdfOptions) {
+  constructor(styles: PdfStyle, options: PdfOptions) {
+    this._pdfParts = [];
     this._allContent = [];
-    this._infoDef = [];
-    this._tocDef = [];
-    this._securiyDef = [];
-    this._apiListDef = [];
-    this._apiDef = [];
     this._styles = styles;
     this._options = options;
-    this._openapiTree = new OpenapiTree();
+    this._openapiTree = new OpenapiInfoV3();
+    this._doc = {} as PDFKit.PDFDocument;
+
+
+    this._documentDef = {
+      footer: this._footer,
+      content: [] as Content[],
+      styles: this._styles as StyleDictionary,
+      defaultStyle: {
+        fontSize: 12,
+        font: "Helvetica",
+      },
+    };
   }
 
-  async _parseAndBuild(api: string): Promise<void> {
+  private _footer(currentPage: number, pageCount: number): Content {
+    return {
+      margin: 10,
+      columns: [
+        {
+          text: "",
+          style: ["sub", "gray", "left"]
+        },
+        {
+          text: `${currentPage} of ${pageCount}`,
+          style: ["sub", "gray", "right"],
+        },
+      ],
+    } as Content;
+  }
+
+  private async _parseAndBuildTree(api: string): Promise<void> {
     await this._openapiTree.parseAndBuild(api);
   }
 
-  async _addInfo(): Promise<void> {
-    console.log();
-
+  private async _addPart(pdfPart: PdfPartProcessor): Promise<void> {
+    return new Promise((resolve) => {
+      this._pdfParts.push(pdfPart);
+      resolve();
+    });
   }
 
-  async _addToc(): Promise<void> {
-    console.log();
-
+  private async _genBuffer(pdfDocument: PDFKit.PDFDocument): Promise<Buffer> {
+    return new Promise((resolve) => {
+      const chunks: Buffer[] = [];
+      pdfDocument.on("data", function (chunk) {
+        chunks.push(chunk);
+      });
+      pdfDocument.on("end", function () {
+        resolve(Buffer.concat(chunks));
+      });
+      pdfDocument.end();
+    });
   }
 
-  async _addSecurity(): Promise<void> {
-    console.log();
-
+  public async build(api: string): Promise<PDFDoc> {
+    await this._addPart(
+      new PdfPartInfo(this._openapiTree, this._options.localize, true)
+    );
+    await this._parseAndBuildTree(api);
+    for (const part of this._pdfParts) {
+      this._allContent.push(await part.genDef());
+    }
+    this._documentDef.content = this._allContent;
+    this._doc = new PdfPrinter({
+      Courier: {
+        normal: "Courier",
+        bold: "Courier-Bold",
+        italics: "Courier-Oblique",
+        bolditalics: "Courier-BoldOblique",
+      },
+      Helvetica: {
+        normal: "Helvetica",
+        bold: "Helvetica-Bold",
+        italics: "Helvetica-Oblique",
+        bolditalics: "Helvetica-BoldOblique",
+      },
+    }).createPdfKitDocument(this._documentDef);
+    return new Promise((resolve) => {
+      resolve(this);
+    });
   }
 
-  async _addApiList(): Promise<void> {
-    console.log();
-
-  }
-
-  async _addApi(): Promise<void> {
-    console.log();
-
-  }
-
-  async build(api: string): Promise<void> {
-    await this._addInfo();
-    await this._addToc();
-    await this._addSecurity();
-    await this._addApiList();
-    await this._addApi();
+  public async writeToFile(
+    filePath: string
+  ): Promise<void> {
+    const data = await this._genBuffer(this._doc);
+    writeFileSync(filePath, data);
+    return new Promise((resolve) => {
+      resolve();
+    });
   }
 }

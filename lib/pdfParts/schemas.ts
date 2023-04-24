@@ -1,11 +1,9 @@
 import { Content } from "pdfmake/interfaces";
 import { PdfPartProcessor } from "./partProcessor";
 
-export class PdfPartApi extends PdfPartProcessor {
+export class PdfPartSchemas extends PdfPartProcessor {
 
-
-  async getDef(): Promise<Content[]> {
-
+  async genDef(): Promise<Content[]> {
     throw new Error("Method not implemented.");
   }
 }

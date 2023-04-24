@@ -1,5 +1,4 @@
 export type Localize = {
-    info: any;
     index: string;
     api: string;
     apiList: string;

@@ -11,7 +11,7 @@ export class RowLinesTableLayout implements CustomTableLayout {
 
   hLineColor(i: number, node: ContentTable): string {
     return i === 0 ||
-            i === 1 ||
-            i === node.table.body.length ? "#777" : "lightgray";
+      i === 1 ||
+      i === node.table.body.length ? "#777" : "lightgray";
   }
 }

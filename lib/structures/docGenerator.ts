@@ -2,32 +2,67 @@ import { PdfOptions } from "../types";
 import { PdfStyle } from "../types/pdfStyle";
 import { PDFDoc } from "./pdfDoc";
 
-export class DocGenerator {
+/**
+ * Class to generate PDF from OpenAPI definition.
+ */
+export class DocGeneratorPDF {
 
-  private _pdfStyle?: PdfStyle;
-  private _doc: PDFDoc;
+  private _pdfStyle: PdfStyle;
+  private _pdfOptions: PdfOptions;
+  private _pdfDoc: PDFDoc;
 
-  constructor(pdfStyles?: PdfStyle, pdfOptions?: PdfOptions) {
-    this._pdfStyle = pdfStyles;
-    this._doc = new PDFDoc(pdfStyles, pdfOptions);
+  constructor(pdfStyle: PdfStyle, pdfOptions: PdfOptions) {
+    this._pdfStyle = pdfStyle;
+    this._pdfOptions = pdfOptions;
+    this._pdfDoc = new PDFDoc(this._pdfStyle, this._pdfOptions);
   }
 
-  set pdfStyles(style: PdfStyle) {
+  /**
+   * setter for pdfStyles
+   */
+  public set pdfStyles(style: PdfStyle) {
     this._pdfStyle = style;
   }
 
   /**
-   *
+   * Method to build pdf from OpenAPI definition and returns promise with
+   * PDFKit.PDFDocument inside
+   * 
    * @param api An OpenAPI definition, or the file path or URL of an OpenAPI
    * definition. The path can be absolute or relative. In Node, the path is
    * relative to process.cwd(). In the browser, it's relative to the URL of
    * the page.
    */
-  async createPdf(api: string): Promise<void> {
-    await this._doc.build(api);
+  public async createPdf(api: string): Promise<PDFDoc> {
+    const doc = await this._pdfDoc.build(api);
+    return new Promise((resolve) => {
+      resolve(doc);
+    });
   }
 
-  async writeToFile(file: string): Promise<void> {
-    console.log();
+  /**
+   * Method to write the PDFKit.PDFDocument to *.pdf file
+   * 
+   * @param file The file path to write the PDF
+   */
+  public async writeToFile(
+    pdfDocument: PDFDoc,
+    file: string
+  ): Promise<void> {
+    await pdfDocument.writeToFile(file);
+    return new Promise((resolve) => {
+      resolve();
+    });
+  }
+
+  public async createPdfAndWriteToFile(
+    api: string,
+    file: string
+  ): Promise<void> {
+    const doc = await this._pdfDoc.build(api);
+    await doc.writeToFile(file);
+    return new Promise((resolve) => {
+      resolve();
+    });
   }
 }

@@ -1,13 +1,16 @@
 import { PdfPartProcessor } from "../../../lib/pdfParts/partProcessor";
 import { Localize } from "../../../lib/types/localize";
-import { OpenapiTree } from "../../../lib/structures/openapiTree";
+import { OpenapiInfoV3 } from "../../../lib/structures/openapiInfo";
 
 describe("PdfPartProcessor", () => {
   let processor: PdfPartProcessor;
 
   beforeEach(() => {
-    const openapiTree = new OpenapiTree();
-    processor = new PdfPartProcessor(openapiTree, {} as Localize);
+    const openapiTree = new OpenapiInfoV3();
+    processor = new PdfPartProcessor(
+      openapiTree,
+      {} as Localize
+    );
   });
 
   describe("markdownToPdfmake", () => {

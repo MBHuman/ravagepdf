@@ -1,5 +1,5 @@
 import { Content } from "pdfmake/interfaces";
-import { OpenapiTree } from "../structures";
+import { OpenapiInfoV3 } from "../structures";
 import { marked } from "marked";
 import htmlToPdfmake from "html-to-pdfmake";
 import { JSDOM } from "jsdom";
@@ -9,12 +9,12 @@ import { Localize } from "../types";
 
 abstract class PdfPartProcessorBase {
 
-  protected _openapiTree: OpenapiTree;
+  protected _openapiTree: OpenapiInfoV3;
   protected _includeExample: boolean;
   protected _localize: Localize;
 
   constructor(
-    openapiTree: OpenapiTree,
+    openapiTree: OpenapiInfoV3,
     localize: Localize,
     includeExample = true
   ) {
@@ -23,9 +23,9 @@ abstract class PdfPartProcessorBase {
     this._localize = localize;
   }
 
-    // eslint-disable-next-line no-unused-vars
-    abstract markdownToPdfmake(markdown: string): Promise<Content[]>;
-    abstract genDef(): Promise<Content[]>;
+  // eslint-disable-next-line no-unused-vars
+  abstract markdownToPdfmake(markdown: string): Promise<Content>;
+  abstract genDef(): Promise<Content[]>;
 }
 
 export class PdfPartProcessor extends PdfPartProcessorBase {

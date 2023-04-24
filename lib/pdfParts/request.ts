@@ -8,10 +8,10 @@ export class PdfPartRequest extends PdfPartProcessor {
   }
 }
 
-export async function getRequest(): Promise<Content[]> {
-  let content: Content[];
+// export async function getRequest(): Promise<Content[]> {
+//   let content: Content[];
 
-  return new Promise((resolve) => {
-    resolve(content);
-  });
-}
+//   return new Promise((resolve) => {
+//     resolve(content);
+//   });
+// }
