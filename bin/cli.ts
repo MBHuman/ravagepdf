@@ -1,6 +1,9 @@
 import { DocGeneratorPDF, PdfOptions, PdfStyle } from "../lib";
 
-const api = "https://pak_a7mgh4lps.smartpack.world/openapi.json";
+
+// eslint-disable-next-line max-len
+const api = "https://app.swaggerhub.com/apiproxy/registry/alexei-zaycev/VoiLOC/1.0.0?resolved=true&flatten=true&pretty=true";
+// const api = "./files/file.json";
 const pdfStyle = {
   title: { fontSize: 32 },
   h1: { fontSize: 22 },

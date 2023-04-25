@@ -25,18 +25,18 @@ abstract class PdfPartProcessorBase {
 
   // eslint-disable-next-line no-unused-vars
   abstract markdownToPdfmake(markdown: string): Promise<Content>;
-  abstract genDef(): Promise<Content[]>;
+  abstract genDef(): Promise<Content>;
 }
 
 export class PdfPartProcessor extends PdfPartProcessorBase {
-  async markdownToPdfmake(markdown: string): Promise<Content[]> {
+  async markdownToPdfmake(markdown: string): Promise<Content> {
     const html = await marked(markdown);
     const { window } = new JSDOM();
     return new Promise((resolve) => {
       resolve(htmlToPdfmake(html, { window: window }) as Content[]);
     });
   }
-  async genDef(): Promise<Content[]> {
+  async genDef(): Promise<Content> {
     throw new Error("Method not implemented.");
   }
 }

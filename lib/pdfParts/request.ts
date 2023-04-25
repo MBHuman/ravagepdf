@@ -3,7 +3,7 @@ import { PdfPartProcessor } from "./partProcessor";
 
 export class PdfPartRequest extends PdfPartProcessor {
 
-  genDef(): Promise<Content[]> {
+  genDef(): Promise<Content> {
     throw new Error("Method not implemented.");
   }
 }

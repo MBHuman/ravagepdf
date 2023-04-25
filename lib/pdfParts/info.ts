@@ -78,8 +78,8 @@ export class PdfPartInfo extends PdfPartProcessor {
     });
   }
 
-  private async _genContact(): Promise<Content[]> {
-    const contactDef: Content[] = [
+  private async _genContact(): Promise<Content> {
+    const contactDef: Content = [
       await this._genName(),
       await this._genEmail(),
       await this._genUrl(),
@@ -94,7 +94,9 @@ export class PdfPartInfo extends PdfPartProcessor {
     let content = {} as ContentStack;
     if (this._openapiTree.info.description) {
       content = {
-        stack: await this.markdownToPdfmake(this._openapiTree.info.description),
+        stack: await this.markdownToPdfmake(
+          this._openapiTree.info.description
+        ) as Content[],
         style: ["topMargin3"],
       };
     }
@@ -103,11 +105,11 @@ export class PdfPartInfo extends PdfPartProcessor {
     });
   }
 
-  async genDef(): Promise<Content[]> {
-    const contactDef = await this._genContact();
+  async genDef(): Promise<Content> {
+    const contactDef = await this._genContact() as Content[];
     const version = this._openapiTree.api.info.version;
     const infoVersion = this._openapiTree.info.title;
-    const content: Content[] = [
+    const content: Content = [
       {
         text: this._localize.apiReference,
         style: ["h2", "primary", "right", "b", "topMargin1"]
@@ -132,8 +134,8 @@ export class PdfPartInfo extends PdfPartProcessor {
 
 export class PdfPartInfoEmpty extends PdfPartProcessor {
 
-  async genDef(): Promise<Content[]> {
-    const content: Content[] = [
+  async genDef(): Promise<Content> {
+    const content: Content = [
       {
         text: this._localize.apiReference,
         style: ["h1", "bold", "primary", "right", "topMargin1"]

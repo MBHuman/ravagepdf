@@ -7,11 +7,11 @@ class ParameterBase extends PdfPartProcessor {
 
 
   // eslint-disable-next-line no-unused-vars
-  protected async _genParameters(parameters: any[]): Promise<Content[]> {
+  protected async _genParameters(parameters: any[]): Promise<Content> {
     throw new Error("Method not implemented.");
   }
 
-  protected async _genTableContent(): Promise<Content[]> {
+  protected async _genTableContent(): Promise<Content> {
     // const tableContentParameters = await this._genParameters();
     // const tableContent: Content[] = [
     //   [
@@ -34,7 +34,7 @@ class ParameterBase extends PdfPartProcessor {
     throw new Error("Method not implemented.");
   }
 
-  async genDef(): Promise<Content[]> {
+  async genDef(): Promise<Content> {
     // const tableContent = await this._genTableContent();
     // const content: Content[] = [
     //   {
@@ -68,7 +68,7 @@ export class ParameterForm extends ParameterBase {
 
   protected async _genParameters(
     parameters: any[],
-  ): Promise<Content[]> {
+  ): Promise<Content> {
     // const tableContentParameters: Content[] = [];
     // Object.entries(parameters)
     //   .forEach(([paramName, param]) => {
@@ -107,7 +107,7 @@ export class ParameterForm extends ParameterBase {
 
 export class ParameterOther extends ParameterBase {
 
-  protected async _genParameters(parameters: any[]): Promise<Content[]> {
+  protected async _genParameters(parameters: any[]): Promise<Content> {
     // const tableContentParameters: Content[] = [];
     // Object.keys(parameters)
     //   .forEach((param) => {

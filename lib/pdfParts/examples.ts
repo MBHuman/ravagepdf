@@ -5,7 +5,7 @@ import { PdfPartProcessor } from "./partProcessor";
  * 
  */
 export class PdfPartExamples extends PdfPartProcessor {
-  async getDef(): Promise<Content[]> {
+  async getDef(): Promise<Content> {
     // const exampleSection: Content[] = [];
     // if (contentTypeObj.example) {
     //   exampleSection.push([

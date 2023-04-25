@@ -4,6 +4,7 @@ import { OpenAPIV3 } from "openapi-types";
 
 type OperationObjectWithPath = OpenAPIV3.OperationObject & {
   path: string;
+  method: string;
 };
 
 export class OpenapiInfoV3 {
@@ -12,7 +13,7 @@ export class OpenapiInfoV3 {
   private _info: OpenAPIV3.InfoObject;
   private _openapi: string;
   private _paths: Record<string, OpenAPIV3.PathItemObject>;
-  private _tagsToPaths: Record<string, OpenAPIV3.PathItemObject[]>;
+  private _tagsToPaths: Record<string, OperationObjectWithPath[]>;
 
   constructor() {
     this._api = {} as OpenAPIV3.Document;
@@ -71,7 +72,7 @@ export class OpenapiInfoV3 {
     return this._paths;
   }
 
-  public get tagsToPaths(): Record<string, OpenAPIV3.PathItemObject[]> {
+  public get tagsToPaths(): Record<string, OperationObjectWithPath[]> {
     return this._tagsToPaths;
   }
 
@@ -91,6 +92,7 @@ export class OpenapiInfoV3 {
             method as keyof OpenAPIV3.PathItemObject
           ] as OperationObjectWithPath;
           operationObject["path"] = path;
+          operationObject["method"] = method;
           const tags = operationObject.tags as Record<number, string>;
           Object.entries(tags).forEach(([, tag]) => {
             if (!(tag in tagsToPaths)) {

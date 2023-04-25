@@ -7,3 +7,4 @@ export * from "./partProcessor";
 export * from "./request";
 export * from "./response";
 export * from "./security";
+export * from "./toc";

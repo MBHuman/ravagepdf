@@ -1,13 +1,18 @@
 import { PdfStyle } from "../types/pdfStyle";
 import { PdfOptions } from "../types/pdfOptions";
 import { OpenapiInfoV3 } from "./openapiInfo";
-import { PdfPartInfo, PdfPartProcessor } from "../pdfParts";
+import {
+  PdfPartApiList,
+  PdfPartInfo, PdfPartProcessor,
+  PdfPartSecurity
+} from "../pdfParts";
 import { writeFileSync } from "fs";
 import {
   Content, TDocumentDefinitions,
   StyleDictionary
 } from "pdfmake/interfaces";
 import PdfPrinter from "pdfmake";
+import { PdfPartToc } from "../pdfParts/toc";
 
 /**
  * PDFDoc is class that builds pdf document from OpenAPI specification.
@@ -85,6 +90,15 @@ export class PDFDoc {
   public async build(api: string): Promise<PDFDoc> {
     await this._addPart(
       new PdfPartInfo(this._openapiTree, this._options.localize, true)
+    );
+    await this._addPart(
+      new PdfPartToc(this._openapiTree, this._options.localize, true)
+    );
+    await this._addPart(
+      new PdfPartSecurity(this._openapiTree, this._options.localize, true)
+    );
+    await this._addPart(
+      new PdfPartApiList(this._openapiTree, this._options.localize, true)
     );
     await this._parseAndBuildTree(api);
     for (const part of this._pdfParts) {
