@@ -1,25 +1,31 @@
 import { Content, ContentTable } from "pdfmake/interfaces";
 import { PdfPartProcessor } from "./partProcessor";
 import { OpenAPIV3 } from "openapi-types";
-import { RowLinesTableLayout } from "../structures";
+import { OpenapiInfoV3, RowLinesTableLayout } from "../structures";
+import { Localize } from "../types";
 
 export class PdfPartSecurity extends PdfPartProcessor {
 
-  private async _genTableContent(): Promise<Content[]> {
+  private async _genTableContent(
+    openapiTree: OpenapiInfoV3,
+    localize: Localize,
+    // eslint-disable-next-line no-unused-vars
+    includeExample?: boolean
+  ): Promise<Content[]> {
     let tableContent = [] as Content[];
-    if (!this._openapiTree.components.securitySchemes) {
+    if (!openapiTree.components.securitySchemes) {
       return new Promise((resolve) => {
         resolve(tableContent);
       });
     }
     tableContent = [
       [
-        { text: this._localize.key, style: ["small", "b"] },
-        { text: this._localize.type, style: ["small", "b"] },
-        { text: this._localize.description, style: ["small", "b"] },
+        { text: localize.key, style: ["small", "b"] },
+        { text: localize.type, style: ["small", "b"] },
+        { text: localize.description, style: ["small", "b"] },
       ]
     ];
-    Object.entries(this._openapiTree.components.securitySchemes as
+    Object.entries(openapiTree.components.securitySchemes as
       Record<string, OpenAPIV3.HttpSecurityScheme>)
       .forEach(([key, val]) => {
         tableContent.push([
@@ -37,22 +43,30 @@ export class PdfPartSecurity extends PdfPartProcessor {
     });
   }
 
-  async genDef(): Promise<Content> {
+  async genDef(
+    openapiTree: OpenapiInfoV3,
+    localize: Localize,
+    includeExample?: boolean
+  ): Promise<Content> {
     let content = [] as Content[];
-    if (!this._openapiTree.components.securitySchemes) {
+    if (!openapiTree.components.securitySchemes) {
       return new Promise((resolve) => {
         resolve(content);
       });
     }
-    const tableContent = await this._genTableContent();
+    const tableContent = await this._genTableContent(
+      openapiTree,
+      localize,
+      includeExample
+    );
 
     content = [
       {
-        text: this._localize.securityAndAuthentication,
+        text: localize.securityAndAuthentication,
         style: ["h3", "b", "primary", "right", "topMargin3"]
       },
       {
-        text: this._localize.securitySchemes,
+        text: localize.securitySchemes,
         style: ["b", "tableMargin"]
       },
     ];
@@ -73,7 +87,14 @@ export class PdfPartSecurity extends PdfPartProcessor {
 
 export class PdfPartSecurityEmpty extends PdfPartProcessor {
 
-  genDef(): Promise<Content[]> {
+  async genDef(
+    // eslint-disable-next-line no-unused-vars
+    openapiTree: OpenapiInfoV3,
+    // eslint-disable-next-line no-unused-vars
+    localize: Localize,
+    // eslint-disable-next-line no-unused-vars
+    includeExample?: boolean
+  ): Promise<Content> {
     const content: Content[] = [];
     return new Promise((resolve) => {
       resolve(content);

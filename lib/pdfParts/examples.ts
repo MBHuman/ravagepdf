@@ -1,11 +1,17 @@
 import { Content } from "pdfmake/interfaces";
 import { PdfPartProcessor } from "./partProcessor";
+import { Localize } from "../types";
+import { OpenapiInfoV3 } from "../structures";
 
 /**
  * :TODO #7 Implement PdfPartExamples
  */
 export class PdfPartExamples extends PdfPartProcessor {
-  async getDef(): Promise<Content> {
+  async genDef(
+    openapiTree: OpenapiInfoV3,
+    localize: Localize,
+    includeExample?: boolean
+  ): Promise<Content> {
     // const exampleSection: Content[] = [];
     // if (contentTypeObj.example) {
     //   exampleSection.push([

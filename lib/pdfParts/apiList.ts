@@ -1,6 +1,7 @@
 import { Content, ContentStack, ContentTable } from "pdfmake/interfaces";
 import { PdfPartProcessor } from "./partProcessor";
-import { RowLinesTableLayout } from "../structures";
+import { OpenapiInfoV3, RowLinesTableLayout } from "../structures";
+import { Localize } from "../types";
 
 
 export class PdfPartApiList extends PdfPartProcessor {
@@ -9,21 +10,26 @@ export class PdfPartApiList extends PdfPartProcessor {
    * :TODO fix incorrect render of table with styles
    * @returns 
    */
-  async genDef(): Promise<Content> {
+  async genDef(
+    openapiTree: OpenapiInfoV3,
+    localize: Localize,
+    // eslint-disable-next-line no-unused-vars
+    includeExample?: boolean
+  ): Promise<Content> {
     const content: Content[] = [
       {
-        text: this._localize.apiList,
+        text: localize.apiList,
         style: ["h3", "b"],
         pageBreak: "before"
       }
     ];
 
-    Object.entries(this._openapiTree.tagsToPaths)
+    Object.entries(openapiTree.tagsToPaths)
       .forEach(([tag, paths], i) => {
         const tableContent = [
           [
-            { text: this._localize.method, style: ["small", "b"] },
-            { text: this._localize.api, style: ["small", "b"] },
+            { text: localize.method, style: ["small", "b"] },
+            { text: localize.api, style: ["small", "b"] },
           ],
         ] as Content[];
         paths.map((path) => {

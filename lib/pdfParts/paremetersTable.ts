@@ -1,6 +1,7 @@
 import { Content } from "pdfmake/interfaces";
-import { RowLinesTableLayout } from "../structures";
+import { OpenapiInfoV3, RowLinesTableLayout } from "../structures";
 import { PdfPartProcessor } from "./partProcessor";
+import { Localize } from "../types";
 // import { Localize } from "../types";
 
 // :TODO #3 implement parameters table class for generate parameters
@@ -37,7 +38,11 @@ class ParameterBase extends PdfPartProcessor {
     throw new Error("Method not implemented.");
   }
 
-  async genDef(): Promise<Content> {
+  async genDef(
+    openapiTree: OpenapiInfoV3,
+    localize: Localize,
+    includeExample?: boolean
+  ): Promise<Content> {
     // const tableContent = await this._genTableContent();
     // const content: Content[] = [
     //   {

@@ -1,16 +1,10 @@
 import { PdfPartProcessor } from "../../../lib/pdfParts/partProcessor";
-import { Localize } from "../../../lib/types/localize";
-import { OpenapiInfoV3 } from "../../../lib/structures/openapiInfo";
 
 describe("PdfPartProcessor", () => {
   let processor: PdfPartProcessor;
 
   beforeEach(() => {
-    const openapiTree = new OpenapiInfoV3();
-    processor = new PdfPartProcessor(
-      openapiTree,
-      {} as Localize
-    );
+    processor = new PdfPartProcessor();
   });
 
   describe("markdownToPdfmake", () => {
@@ -41,12 +35,6 @@ describe("PdfPartProcessor", () => {
       ];
       const result = await processor.markdownToPdfmake(markdown);
       expect(result).toEqual(expected);
-    });
-  });
-
-  describe("genDef", () => {
-    it("should return pdfmake content", async () => {
-      // write your test case here
     });
   });
 });

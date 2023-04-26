@@ -3,6 +3,7 @@ export * from "./apiList";
 export * from "./examples";
 export * from "./info";
 export * from "./paremetersTable";
+export * from "./partBuilder";
 export * from "./partProcessor";
 export * from "./request";
 export * from "./response";
