@@ -3,6 +3,9 @@ import { RowLinesTableLayout } from "../structures";
 import { PdfPartProcessor } from "./partProcessor";
 // import { Localize } from "../types";
 
+// :TODO #3 implement parameters table class for generate parameters
+// :TODO #4 rename ParameterBase and other to PdfPartParameter
+
 class ParameterBase extends PdfPartProcessor {
 
 

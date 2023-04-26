@@ -2,7 +2,7 @@ import { Content } from "pdfmake/interfaces";
 import { PdfPartProcessor } from "./partProcessor";
 
 /**
- * 
+ * :TODO #7 Implement PdfPartExamples
  */
 export class PdfPartExamples extends PdfPartProcessor {
   async getDef(): Promise<Content> {

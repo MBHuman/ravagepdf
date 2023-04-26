@@ -1,6 +1,7 @@
 import { Content } from "pdfmake/interfaces";
 import { PdfPartProcessor } from "./partProcessor";
 
+// :TODO #5 implement PdfPartRequest
 export class PdfPartRequest extends PdfPartProcessor {
 
   genDef(): Promise<Content> {

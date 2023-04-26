@@ -5,6 +5,10 @@ import { RowLinesTableLayout } from "../structures";
 
 export class PdfPartApiList extends PdfPartProcessor {
 
+  /**
+   * :TODO fix incorrect render of table with styles
+   * @returns 
+   */
   async genDef(): Promise<Content> {
     const content: Content[] = [
       {
