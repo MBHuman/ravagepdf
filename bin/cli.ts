@@ -1,5 +1,6 @@
 import { DocGeneratorPDF, PdfOptions, PdfStyle } from "../lib";
 
+// :TODO #9 Write tests for CLI
 
 // eslint-disable-next-line max-len
 const api = "https://app.swaggerhub.com/apiproxy/registry/alexei-zaycev/VoiLOC/1.0.0?resolved=true&flatten=true&pretty=true";
