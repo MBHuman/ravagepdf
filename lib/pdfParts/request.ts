@@ -11,12 +11,7 @@ export class PdfPartRequest extends PdfPartProcessor {
     localize: Localize,
     includeExample?: boolean
   ): Promise<Content> {
-    const content = [] as Content;
-
-
-    return new Promise((resolve) => {
-      resolve(content);
-    });
+    throw new Error("Not implemented");
   }
 }
 

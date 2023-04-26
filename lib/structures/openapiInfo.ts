@@ -2,7 +2,7 @@ import SwaggerParser from "@apidevtools/swagger-parser";
 import { OpenAPIV3 } from "openapi-types";
 
 
-type OperationObjectWithPath = OpenAPIV3.OperationObject & {
+export type OperationObjectWithPath = OpenAPIV3.OperationObject & {
   path: string;
   method: string;
 };
