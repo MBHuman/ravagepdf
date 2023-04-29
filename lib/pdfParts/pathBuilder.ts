@@ -86,10 +86,18 @@ export class PathBuilder extends PathBuilderBase {
   ): Promise<Content[]> {
     return [
       {
-        text: `${tagSeq}.${methodSeq} ${operationObject
-          .method.toUpperCase()} ${operationObject.path}`,
-        style: ["topMargin3", "mono", "p", "primary", "b"],
+        text: [
+          {
+            text: operationObject.deprecated ? "DEPRECATED " : ""
+          },
+          {
+            text: `${tagSeq}.${methodSeq} ${operationObject
+              .method.toUpperCase()} ${operationObject.path}`,
+
+            decoration: operationObject.deprecated ? "lineThrough" : undefined
+          }],
         tocItem: true,
+        style: ["topMargin3", "mono", "p", "primary", "b"],
         tocStyle: ["small", "blue", "mono"],
         tocNumberStyle: ["small", "blue", "mono"],
       },

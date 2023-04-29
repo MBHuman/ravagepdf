@@ -23,8 +23,8 @@ abstract class MediaTreeBuilderBase {
 }
 
 export class MediaTreeBuilder extends MediaTreeBuilderBase {
-  public async build(obj?: OpenAPIV3.MediaTypeObject): Promise<Content> {
-    if (!obj) {
+  public async build(obj: OpenAPIV3.MediaTypeObject): Promise<Content> {
+    if (obj) {
       // const descrStack = this._descriptionBuilder.genProp(obj);
     }
     throw new Error("Method not implemented");

@@ -1,4 +1,5 @@
 import SwaggerParser from "@apidevtools/swagger-parser";
+import OpenAPIParser from "@readme/openapi-parser";
 import { OpenAPIV3 } from "openapi-types";
 
 
@@ -109,7 +110,7 @@ export class OpenapiInfoV3 {
   }
 
   public async parse(apiPath: string): Promise<void> {
-    this._api = await SwaggerParser.parse(apiPath) as OpenAPIV3.Document;
+    this._api = await OpenAPIParser.parse(apiPath) as OpenAPIV3.Document;
   }
 
   public async build(): Promise<void> {
