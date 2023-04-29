@@ -43,9 +43,9 @@ export class ResponsesBuilder extends ResponsesBuilderBase {
     const content = [
       await this._genHeader()
     ] as Content[];
-    // const content = [
-    //   await this._genHeader()
-    // ] as Content[];
+    if (!responses) {
+      return content;
+    }
     for (const [code, response] of Object.entries(responses as
       Record<string, OpenAPIV3.ResponseObject>)) {
       content.push([
