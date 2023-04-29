@@ -11,9 +11,10 @@ import {
   Content, TDocumentDefinitions,
   StyleDictionary
 } from "pdfmake/interfaces";
-import PdfPrinter from "pdfmake";
 import { PdfPartToc } from "../pdfParts/toc";
 import { PdfPartPaths } from "../pdfParts/paths";
+import { TCreatedPdf, createPdf } from "pdfmake/build/pdfmake";
+import { RobotoVFS } from "../fonts/roboto";
 
 /**
  * PDFDoc is class that builds pdf document from OpenAPI specification.
@@ -25,13 +26,13 @@ export class PDFDoc {
   private _styles: PdfStyle;
   private _options: PdfOptions;
   private _documentDef: TDocumentDefinitions;
-  private _doc: PDFKit.PDFDocument;
+  private _doc: TCreatedPdf;
 
   constructor(styles: PdfStyle, options: PdfOptions) {
     this._allContent = [];
     this._styles = styles;
     this._options = options;
-    this._doc = {} as PDFKit.PDFDocument;
+    this._doc = {} as TCreatedPdf;
     this._pdfPartsBuilder = new PdfPartBuilder(
       this._options.localize,
       this._styles
@@ -44,7 +45,7 @@ export class PDFDoc {
       styles: this._styles as StyleDictionary,
       defaultStyle: {
         fontSize: 12,
-        font: "Helvetica",
+        font: "Roboto",
       },
     };
   }
@@ -91,20 +92,7 @@ export class PDFDoc {
     ]);
     this._allContent = await this._pdfPartsBuilder.buildParts(api);
     this._documentDef.content = this._allContent;
-    this._doc = new PdfPrinter({
-      Courier: {
-        normal: "Courier",
-        bold: "Courier-Bold",
-        italics: "Courier-Oblique",
-        bolditalics: "Courier-BoldOblique",
-      },
-      Helvetica: {
-        normal: "Helvetica",
-        bold: "Helvetica-Bold",
-        italics: "Helvetica-Oblique",
-        bolditalics: "Helvetica-BoldOblique",
-      },
-    }).createPdfKitDocument(this._documentDef);
+    this._doc = createPdf(this._documentDef, undefined, undefined, RobotoVFS);
     return new Promise((resolve) => {
       resolve(this);
     });
@@ -113,8 +101,9 @@ export class PDFDoc {
   public async writeToFile(
     filePath: string
   ): Promise<void> {
-    const data = await this._genBuffer(this._doc);
-    writeFileSync(filePath, data);
+    this._doc.getBuffer((data) => {
+      writeFileSync(filePath, data);
+    });
     return new Promise((resolve) => {
       resolve();
     });

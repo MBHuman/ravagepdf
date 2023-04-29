@@ -36,8 +36,8 @@ const pdfStyle = {
   darkGray: { color: "#666666" },
   red: { color: "orangered" },
   blue: { color: "#005b96" },
-  mono: { font: "Courier", fontSize: 10 },
-  monoSub: { font: "Courier", fontSize: 8 },
+  mono: { font: "Roboto", fontSize: 10 },
+  monoSub: { font: "Roboto", fontSize: 8 },
 } as PdfStyle;
 const pdfOptions = {
   pdfSortTags: false,

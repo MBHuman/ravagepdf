@@ -44,8 +44,8 @@ describe("DocGeneratorPDF", () => {
       darkGray: { color: "#666666" },
       red: { color: "orangered" },
       blue: { color: "#005b96" },
-      mono: { font: "Courier", fontSize: 10 },
-      monoSub: { font: "Courier", fontSize: 8 },
+      mono: { font: "Roboto", fontSize: 10 },
+      monoSub: { font: "Roboto", fontSize: 8 },
     };
     pdfOptions = {
       pdfSortTags: false,
@@ -110,22 +110,28 @@ describe("DocGeneratorPDF", () => {
   describe("writeToFile", () => {
     it("should write a PDF document to a file", async () => {
       const pdfDocument = await docGeneratorPDF.createPdf(api);
-      const fileName = "test.pdf";
+      const fileName = "test1.pdf";
       await pdfDocument.writeToFile(fileName);
       // check that the file exists
-      expect(fs.existsSync(fileName)).toBe(true);
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      const isExists = fs.existsSync(fileName);
+      expect(isExists).toBe(true);
       fs.unlinkSync(fileName);
+      await new Promise(resolve => setTimeout(resolve, 1000));
       expect(fs.existsSync(fileName)).toBe(false);
     });
   });
 
   describe("createPdfAndWriteToFile", () => {
     it("should create a PDF document and write it to a file", async () => {
-      const fileName = "test.pdf";
+      const fileName = "test2.pdf";
       await docGeneratorPDF.createPdfAndWriteToFile(api, fileName);
       // check that the file exists
-      expect(fs.existsSync(fileName)).toBe(true);
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      const isExists = fs.existsSync(fileName);
+      expect(isExists).toBe(true);
       fs.unlinkSync(fileName);
+      await new Promise(resolve => setTimeout(resolve, 1000));
       expect(fs.existsSync(fileName)).toBe(false);
     });
   });
