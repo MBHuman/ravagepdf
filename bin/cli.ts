@@ -2,7 +2,6 @@ import { DocGeneratorPDF, PdfOptions, PdfStyle } from "../lib";
 
 // :TODO #9 Write tests for CLI
 
-// eslint-disable-next-line max-len
 const api = "https://app.swaggerhub.com/apiproxy/registry/alexei-zaycev/VoiLOC/1.0.0?resolved=true&flatten=true&pretty=true";
 // const api = "./files/file.json";
 const pdfStyle = {
@@ -75,7 +74,7 @@ const pdfOptions = {
     description: "DESCRIPTION",
     request: "REQUEST",
     requestBody: "REQUEST BODY",
-    response: "RESPONSE",
+    response: "RESPONSES",
     responseModel: "RESPONSE MODEL",
     statusCode: "STATUS CODE",
     deprecated: "DEPRECATED",

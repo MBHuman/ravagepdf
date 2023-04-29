@@ -76,8 +76,7 @@ export class PdfPartSecurity extends PdfPartProcessor {
         body: tableContent,
       },
       layout: RowLinesTableLayout,
-      style: "tableMargin",
-      pageBreak: "after",
+      style: "tableMargin"
     } as ContentTable);
     return new Promise((resolve) => {
       resolve(content);

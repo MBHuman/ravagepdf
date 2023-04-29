@@ -25,7 +25,7 @@ export class PdfPartApiList extends PdfPartProcessor {
     ];
 
     Object.entries(openapiTree.tagsToPaths)
-      .forEach(([tag, paths], i) => {
+      .forEach(([tag, paths]) => {
         const tableContent = [
           [
             { text: localize.method, style: ["small", "b"] },
@@ -52,7 +52,6 @@ export class PdfPartApiList extends PdfPartProcessor {
           {
             text: tag,
             style: ["h6", "b", "primary", "tableMargin"],
-            pageBreak: i === 0 ? "before" : "after"
           },
           { text: "", style: ["p"] },
           {

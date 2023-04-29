@@ -93,13 +93,14 @@ export class OpenapiInfoV3 {
           ] as OperationObjectWithPath;
           operationObject["path"] = path;
           operationObject["method"] = method;
-          const tags = operationObject.tags as Record<number, string>;
-          Object.entries(tags).forEach(([, tag]) => {
+          const tags = operationObject.tags as string[] ??
+            ["None Tag"] as string[];
+          for (const tag of tags) {
             if (!(tag in tagsToPaths)) {
               tagsToPaths[tag] = [] as OperationObjectWithPath[];
             }
             tagsToPaths[tag].push(operationObject as OperationObjectWithPath);
-          });
+          }
         });
     });
     return new Promise((resolve) => {

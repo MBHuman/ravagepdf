@@ -13,6 +13,7 @@ import {
 } from "pdfmake/interfaces";
 import PdfPrinter from "pdfmake";
 import { PdfPartToc } from "../pdfParts/toc";
+import { PdfPartPaths } from "../pdfParts/paths";
 
 /**
  * PDFDoc is class that builds pdf document from OpenAPI specification.
@@ -84,6 +85,7 @@ export class PDFDoc {
     await this._pdfPartsBuilder.addParts([
       new PdfPartInfo(),
       new PdfPartToc(),
+      new PdfPartPaths(),
       new PdfPartSecurity(),
       new PdfPartApiList(),
     ]);
