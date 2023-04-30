@@ -11,7 +11,7 @@ describe("DocGeneratorPDF", () => {
 
   beforeEach(() => {
     // eslint-disable-next-line max-len
-    api = "https://app.swaggerhub.com/apiproxy/registry/alexei-zaycev/VoiLOC/1.0.0?resolved=true&flatten=true&pretty=true";
+    api = "https://app.swaggerhub.com/apiproxy/registry/SAIDOVUMID7744_1/aiumid/1.0.0?resolved=true&flatten=true&pretty=true";
     pdfStyle = {
       title: { fontSize: 32 },
       h1: { fontSize: 22 },
@@ -113,11 +113,11 @@ describe("DocGeneratorPDF", () => {
       const fileName = "test1.pdf";
       await pdfDocument.writeToFile(fileName);
       // check that the file exists
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 500));
       const isExists = fs.existsSync(fileName);
       expect(isExists).toBe(true);
       fs.unlinkSync(fileName);
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 500));
       expect(fs.existsSync(fileName)).toBe(false);
     });
   });

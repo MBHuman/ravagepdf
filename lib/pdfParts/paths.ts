@@ -24,7 +24,7 @@ export class PdfPartPaths extends PdfPartProcessor {
     let tagSeq = 1;
     for (const [tag, paths] of Object.entries(openapiTree.tagsToPaths)) {
       tagsPaths.push(
-        await pathsTagBuilder.genTag(tag, tagSeq, paths)
+        await pathsTagBuilder.genTag(tag, tagSeq, paths, openapiTree)
       );
       tagSeq++;
     }

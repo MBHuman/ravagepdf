@@ -9,8 +9,8 @@ describe("OpenapiInfoV3", () => {
 
   describe("parseAndBuild()", () => {
     it("should parse and build the OpenAPI document", async () => {
-      // eslint-disable-next-line max-len
-      const apiPath = "https://app.swaggerhub.com/apiproxy/registry/alexei-zaycev/VoiLOC/1.0.0?resolved=true&flatten=true&pretty=true";
+       
+      const apiPath = "https://pak_tst005.smartpack.world/openapi.json";
       await openapiInfo.parseAndBuild(apiPath);
       expect(openapiInfo).toBeDefined();
       expect(openapiInfo.api).not.toBe({});

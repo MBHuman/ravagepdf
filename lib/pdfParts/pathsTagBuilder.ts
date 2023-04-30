@@ -1,7 +1,7 @@
 import { Content } from "pdfmake/interfaces";
 import { Localize, PdfStyle } from "../types";
 import { PathBuilder } from "./pathBuilder";
-import { OperationObjectWithPath } from "../structures";
+import { OpenapiInfoV3, OperationObjectWithPath } from "../structures";
 
 
 abstract class PathsTagBuilderBase {
@@ -32,6 +32,8 @@ abstract class PathsTagBuilderBase {
     tagSeq: number,
     // eslint-disable-next-line no-unused-vars
     operationObjects: OperationObjectWithPath[],
+    // eslint-disable-next-line no-unused-vars
+    openapi: OpenapiInfoV3,
   ): Promise<Content>;
 
 }
@@ -51,7 +53,8 @@ export class PathsTagBuilder extends PathsTagBuilderBase {
   public async genTag(
     tag: string,
     tagSeq: number,
-    operationObjects: OperationObjectWithPath[]
+    operationObjects: OperationObjectWithPath[],
+    openapi: OpenapiInfoV3
   ): Promise<Content> {
     const content = [
       await this._genHeader(tag, tagSeq),
@@ -61,7 +64,8 @@ export class PathsTagBuilder extends PathsTagBuilderBase {
       content.push(await this._pathBuilder.genPath(
         tagSeq,
         methodSeq,
-        operationObject
+        operationObject,
+        openapi
       ));
       methodSeq++;
     }

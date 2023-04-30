@@ -1,6 +1,7 @@
 import { Content } from "pdfmake/interfaces";
 import { Localize } from "../types";
 import { PropDescription } from "../types/propDescription";
+import { OpenAPIV3 } from "openapi-types";
 
 
 abstract class DescriptionBuilderBase {
@@ -11,105 +12,120 @@ abstract class DescriptionBuilderBase {
   }
   protected abstract _genReadOrWrite(
     // eslint-disable-next-line no-unused-vars
-    text?: string
+    prop: OpenAPIV3.SchemaObject
   ): Promise<Content>;
 
   protected abstract _genConstraints(
     // eslint-disable-next-line no-unused-vars
-    text?: string
+    prop: OpenAPIV3.SchemaObject
   ): Promise<Content>;
 
   protected abstract _genDefault(
     // eslint-disable-next-line no-unused-vars
-    text?: string
-  ): Promise<Content>;
-
-  protected abstract _genAllowed(
-    // eslint-disable-next-line no-unused-vars
-    text?: string
+    prop: OpenAPIV3.SchemaObject
   ): Promise<Content>;
 
   protected abstract _genPattern(
     // eslint-disable-next-line no-unused-vars
-    text?: string
+    prop: OpenAPIV3.SchemaObject
   ): Promise<Content>;
 
   protected abstract _genName(
     // eslint-disable-next-line no-unused-vars
-    text?: string
+    prop: OpenAPIV3.SchemaObject
+  ): Promise<Content>;
+
+  protected abstract _genDescr(
+    // eslint-disable-next-line no-unused-vars
+    prop: OpenAPIV3.SchemaObject
   ): Promise<Content>;
 
   // eslint-disable-next-line no-unused-vars
-  public abstract genProp(prop: PropDescription): Promise<Content>;
+  public abstract genProp(prop: OpenAPIV3.SchemaObject): Promise<Content>;
 }
 
 export class DescriptionBuilder extends DescriptionBuilderBase {
 
   protected async _genReadOrWrite(
-    text?: string
+    prop: OpenAPIV3.SchemaObject
   ): Promise<Content> {
-    return text ? {
-      text: text,
-      style: ["sub", "b", "darkGray"],
-      margin: [0, 3, 0, 0],
-    } as Content : {} as Content;
+    throw new Error("Method not implemented");
   }
   protected async _genConstraints(
-    text?: string
+    prop: OpenAPIV3.SchemaObject
   ): Promise<Content> {
-    return text ? {
-      text: text,
-      style: ["small", "mono", "darkGray"],
-    } as Content : {} as Content;
+    throw new Error("Method not implemented");
   }
   protected async _genDefault(
-    text?: string
+    prop: OpenAPIV3.SchemaObject
   ): Promise<Content> {
-    return text ? {
+    return {
       text: [
         { text: `${this._localize.default}:`, style: ["sub", "b", "darkGray"] },
-        { text: text, style: ["small", "darkGray", "mono"] },
+        { text: prop.default ?? "", style: ["small", "darkGray", "mono"] },
       ],
-    } as Content : {} as Content;
-  }
-  protected async _genAllowed(
-    text?: string
-  ): Promise<Content> {
-    return text ? {
-      text: [
-        { text: `${this._localize.allowed}:`, style: ["sub", "b", "darkGray"] },
-        { text: text, style: ["small", "lightGray", "mono"] },
-      ],
-    } as Content : {} as Content;
-  }
-  protected async _genPattern(
-    text?: string
-  ): Promise<Content> {
-    return text ? {
-      text: [
-        { text: `${this._localize.pattern}:`, style: ["sub", "b", "darkGray"] },
-        { text: text, style: ["small", "lightGray", "mono"] },
-      ],
-    } as Content : {} as Content;
-  }
-  protected async _genName(
-    text?: string
-  ): Promise<Content> {
-    return text ? {
-      text: text,
-      style: ["sub", "lightGray"],
-      margin: [0, 3, 0, 0],
-    } as Content : {} as Content;
+    } as Content;
   }
 
-  public async genProp(prop: PropDescription): Promise<Content> {
+  protected async _genPattern(
+    prop: OpenAPIV3.SchemaObject
+  ): Promise<Content> {
+    return {
+      text: [
+        { text: `${this._localize.pattern}:`, style: ["sub", "b", "darkGray"] },
+        { text: prop.pattern ?? "", style: ["small", "lightGray", "mono"] },
+      ],
+    } as Content;
+  }
+  protected async _genName(
+    prop: OpenAPIV3.SchemaObject
+  ): Promise<Content> {
+    return {
+      text: prop.title ?? "",
+      style: ["sub", "lightGray"],
+      margin: [0, 3, 0, 0],
+    } as Content;
+  }
+
+  protected async _genDescr(
+    prop: OpenAPIV3.SchemaObject
+  ): Promise<Content> {
+    return {
+      text: prop.description ?? "",
+      style: ["sub", "lightGray"],
+      margin: [0, 3, 0, 0],
+    } as Content;
+  }
+
+  protected async _genEnum(
+    prop: OpenAPIV3.SchemaObject
+  ): Promise<Content> {
+    if (prop.enum && (
+      prop.enum.every((elem) => typeof elem === "string") ||
+      prop.enum.every((elem) => typeof elem === "number")
+    )) {
+      return {
+        text: `ENUM: ${prop.enum.join(", ")}`,
+        style: ["sub", "lightGray"],
+        margin: [0, 3, 0, 0],
+      } as Content;
+    }
+    return {} as Content;
+  }
+
+  public async genProp(prop: OpenAPIV3.SchemaObject): Promise<Content> {
     return [
-      await this._genReadOrWrite(prop.setReadOrWriteOnly),
-      await this._genConstraints(prop.setConstraints),
-      await this._genDefault(prop.setDefault),
-      await this._genAllowed(prop.setAllowed),
-      await this._genPattern(prop.setPattern),
-      await this._genName(prop.name),
+      // await this._genDefault(prop),
+      // await this._genPattern(prop),
+      await this._genEnum(prop),
+      await this._genDescr(prop)
     ] as Content;
+  }
+
+  public async genType(prop: OpenAPIV3.SchemaObject): Promise<string> {
+    if (prop.enum) {
+      return "enum";
+    }
+    return prop.type ?? "" as string;
   }
 }

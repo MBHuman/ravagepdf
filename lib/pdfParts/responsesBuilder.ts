@@ -2,6 +2,7 @@ import { Content } from "pdfmake/interfaces";
 import { Localize, PdfStyle } from "../types";
 import { OpenAPIV3 } from "openapi-types";
 import { ResponseBuilder } from "./responseBuilder";
+import { OpenapiInfoV3 } from "../structures";
 
 
 abstract class ResponsesBuilderBase {
@@ -25,7 +26,9 @@ abstract class ResponsesBuilderBase {
 
   public abstract genDef(
     // eslint-disable-next-line no-unused-vars
-    responses: OpenAPIV3.ResponsesObject
+    responses: OpenAPIV3.ResponsesObject,
+    // eslint-disable-next-line no-unused-vars
+    openapi: OpenapiInfoV3
   ): Promise<Content>;
 }
 
@@ -38,7 +41,8 @@ export class ResponsesBuilder extends ResponsesBuilderBase {
     } as Content;
   }
   public async genDef(
-    responses: OpenAPIV3.ResponsesObject
+    responses: OpenAPIV3.ResponsesObject,
+    openapi: OpenapiInfoV3
   ): Promise<Content> {
     const content = [
       await this._genHeader()
@@ -51,7 +55,8 @@ export class ResponsesBuilder extends ResponsesBuilderBase {
       content.push([
         await this._responseBuilder.genResponse(
           code,
-          response
+          response,
+          openapi
         )
       ]);
     }

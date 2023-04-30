@@ -2,7 +2,7 @@ import { Content } from "pdfmake/interfaces";
 import { Localize, PdfStyle } from "../types";
 import { RequestBuilder } from "./requestBuilder";
 import { ResponsesBuilder } from "./responsesBuilder";
-import { OperationObjectWithPath } from "../structures";
+import { OpenapiInfoV3, OperationObjectWithPath } from "../structures";
 import { OpenAPIV3 } from "openapi-types";
 import { markdownToPdfmake } from "../utils/markdown";
 
@@ -52,11 +52,15 @@ abstract class PathBuilderBase {
   ): Promise<Content>;
   protected abstract _genRequest(
     // eslint-disable-next-line no-unused-vars
-    operationObject: OperationObjectWithPath
+    operationObject: OperationObjectWithPath,
+    // eslint-disable-next-line no-unused-vars
+    openapi: OpenapiInfoV3
   ): Promise<Content>;
   protected abstract _genResponses(
     // eslint-disable-next-line no-unused-vars
-    operationObject: OperationObjectWithPath
+    operationObject: OperationObjectWithPath,
+    // eslint-disable-next-line no-unused-vars
+    openapi: OpenapiInfoV3
   ): Promise<Content>;
 
   protected abstract _buildContent(
@@ -65,7 +69,9 @@ abstract class PathBuilderBase {
     // eslint-disable-next-line no-unused-vars
     methodSeq: number,
     // eslint-disable-next-line no-unused-vars
-    operationObject: OperationObjectWithPath
+    operationObject: OperationObjectWithPath,
+    // eslint-disable-next-line no-unused-vars
+    openapi: OpenapiInfoV3
   ): Promise<void>;
 
   public abstract genPath(
@@ -74,7 +80,9 @@ abstract class PathBuilderBase {
     // eslint-disable-next-line no-unused-vars
     methodSeq: number,
     // eslint-disable-next-line no-unused-vars
-    operationObject: OperationObjectWithPath
+    operationObject: OperationObjectWithPath,
+    // eslint-disable-next-line no-unused-vars
+    openapi: OpenapiInfoV3
   ): Promise<Content>;
 }
 
@@ -119,24 +127,29 @@ export class PathBuilder extends PathBuilderBase {
     return content;
   }
   protected async _genRequest(
-    operationObject: OperationObjectWithPath
+    operationObject: OperationObjectWithPath,
+    openapi: OpenapiInfoV3
   ): Promise<Content> {
     return operationObject.requestBody ?
       this._requestBuilder.genDef(
-        operationObject.requestBody as OpenAPIV3.RequestBodyObject
+        operationObject.requestBody as OpenAPIV3.RequestBodyObject,
+        openapi
       ) : {} as Content;
   }
   protected async _genResponses(
-    operationObject: OperationObjectWithPath
+    operationObject: OperationObjectWithPath,
+    openapi: OpenapiInfoV3
   ): Promise<Content> {
     return this._responsesBuilder.genDef(
-      operationObject.responses as OpenAPIV3.ResponsesObject
+      operationObject.responses as OpenAPIV3.ResponsesObject,
+      openapi
     );
   }
   protected async _buildContent(
     tagSeq: number,
     methodSeq: number,
-    operationObject: OperationObjectWithPath
+    operationObject: OperationObjectWithPath,
+    openapi: OpenapiInfoV3
   ): Promise<void> {
     this._header = await this._genHeader(
       tagSeq,
@@ -144,19 +157,21 @@ export class PathBuilder extends PathBuilderBase {
       operationObject,
     );
     this._description = await this._genDescription(operationObject);
-    this._request = await this._genRequest(operationObject);
-    this._responses = await this._genResponses(operationObject);
+    this._request = await this._genRequest(operationObject, openapi);
+    this._responses = await this._genResponses(operationObject, openapi);
   }
 
   public async genPath(
     tagSeq: number,
     methodSeq: number,
-    operationObject: OperationObjectWithPath
+    operationObject: OperationObjectWithPath,
+    openapi: OpenapiInfoV3
   ): Promise<Content> {
     await this._buildContent(
       tagSeq,
       methodSeq,
       operationObject,
+      openapi
     );
     return [
       ...this._header,

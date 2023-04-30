@@ -3,6 +3,7 @@ import { Localize, PdfStyle } from "../types";
 import { OpenAPIV3 } from "openapi-types";
 import { ExampleBuilder } from "./exampleBuilder";
 import { MediaTreeBuilder } from "./mediaTreeBuilder";
+import { OpenapiInfoV3 } from "../structures";
 
 
 abstract class RequestBuilderBase {
@@ -30,12 +31,16 @@ abstract class RequestBuilderBase {
 
   protected abstract _genInfo(
     // eslint-disable-next-line no-unused-vars
-    requestBody: OpenAPIV3.RequestBodyObject
+    requestBody: OpenAPIV3.RequestBodyObject,
+    // eslint-disable-next-line no-unused-vars
+    openapi: OpenapiInfoV3
   ): Promise<Content>;
 
   public abstract genDef(
     // eslint-disable-next-line no-unused-vars
-    requestBody: OpenAPIV3.RequestBodyObject
+    requestBody: OpenAPIV3.RequestBodyObject,
+    // eslint-disable-next-line no-unused-vars
+    openapi: OpenapiInfoV3,
   ): Promise<Content>;
 }
 
@@ -51,28 +56,33 @@ export class RequestBuilder extends RequestBuilderBase {
   }
 
   protected async _genInfo(
-    requestBody: OpenAPIV3.RequestBodyObject
+    requestBody: OpenAPIV3.RequestBodyObject,
+    openapi: OpenapiInfoV3,
   ): Promise<Content> {
     const content = [] as Content[];
     if (!requestBody.content) {
       return content;
     }
-    for (const [type,] of Object.entries(requestBody.content)) {
-      content.push({
-        text: `${this._localize.requestBody} - ${type}`,
-        margin: [0, 10, 0, 0],
-        style: ["small", "b"]
-      });
+    for (const [type, mediaObject] of Object.entries(requestBody.content)) {
+      content.push([
+        {
+          text: `${this._localize.requestBody} - ${type}`,
+          margin: [0, 10, 0, 0],
+          style: ["small", "b"]
+        },
+        await this._mediaTreeBuilder.build(mediaObject, openapi)
+      ]);
     }
     return content;
   }
 
   public async genDef(
-    requestBody: OpenAPIV3.RequestBodyObject
+    requestBody: OpenAPIV3.RequestBodyObject,
+    openapi: OpenapiInfoV3
   ): Promise<Content> {
     const content = [
       await this._genHeader(),
-      await this._genInfo(requestBody)
+      await this._genInfo(requestBody, openapi)
     ] as Content[];
     return content;
   }
