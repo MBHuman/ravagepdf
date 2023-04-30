@@ -85,7 +85,13 @@ export class ResponseBuilder extends ResponseBuilderBase {
           margin: [0, 10, 0, 0],
           style: ["small", "b"]
         },
-        await this._mediaTreeBuilder.build(mediaObject, openapi)
+        await this._mediaTreeBuilder.build(mediaObject, openapi),
+        {
+          text: this._localize.example,
+          margin: [0, 10, 0, 0],
+          style: ["small", "b", "blue"]
+        },
+        await this._exampleBuilder.build(mediaObject, openapi)
       ]);
     }
     return content;

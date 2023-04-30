@@ -36,6 +36,7 @@ abstract class RequestBuilderBase {
     openapi: OpenapiInfoV3
   ): Promise<Content>;
 
+
   public abstract genDef(
     // eslint-disable-next-line no-unused-vars
     requestBody: OpenAPIV3.RequestBodyObject,
@@ -70,7 +71,13 @@ export class RequestBuilder extends RequestBuilderBase {
           margin: [0, 10, 0, 0],
           style: ["small", "b"]
         },
-        await this._mediaTreeBuilder.build(mediaObject, openapi)
+        await this._mediaTreeBuilder.build(mediaObject, openapi),
+        {
+          text: this._localize.example,
+          margin: [0, 10, 0, 0],
+          style: ["small", "b", "blue"]
+        },
+        await this._exampleBuilder.build(mediaObject, openapi)
       ]);
     }
     return content;
@@ -82,7 +89,7 @@ export class RequestBuilder extends RequestBuilderBase {
   ): Promise<Content> {
     const content = [
       await this._genHeader(),
-      await this._genInfo(requestBody, openapi)
+      await this._genInfo(requestBody, openapi),
     ] as Content[];
     return content;
   }
