@@ -40,8 +40,18 @@ abstract class DescriptionBuilderBase {
     prop: OpenAPIV3.SchemaObject
   ): Promise<Content>;
 
-  // eslint-disable-next-line no-unused-vars
-  public abstract genProp(prop: OpenAPIV3.SchemaObject): Promise<Content>;
+  protected abstract _genRequired(
+    // eslint-disable-next-line no-unused-vars
+    required: boolean
+  ): Promise<Content>;
+
+
+  public abstract genProp(
+    // eslint-disable-next-line no-unused-vars
+    prop: OpenAPIV3.SchemaObject,
+    // eslint-disable-next-line no-unused-vars
+    required: boolean
+  ): Promise<Content>;
 }
 
 export class DescriptionBuilder extends DescriptionBuilderBase {
@@ -59,9 +69,15 @@ export class DescriptionBuilder extends DescriptionBuilderBase {
   protected async _genDefault(
     prop: OpenAPIV3.SchemaObject
   ): Promise<Content> {
+    if (!prop.default) {
+      return {} as Content;
+    }
     return {
       text: [
-        { text: `${this._localize.default}:`, style: ["sub", "b", "darkGray"] },
+        {
+          text: `${this._localize.default}: `,
+          style: ["sub", "b", "darkGray"]
+        },
         { text: prop.default ?? "", style: ["small", "darkGray", "mono"] },
       ],
     } as Content;
@@ -105,17 +121,40 @@ export class DescriptionBuilder extends DescriptionBuilderBase {
       prop.enum.every((elem) => typeof elem === "number")
     )) {
       return {
-        text: `ENUM: ${prop.enum.join(", ")}`,
-        style: ["sub", "lightGray"],
-        margin: [0, 3, 0, 0],
+        text: [
+          {
+            text: `${this._localize.allowed}: `,
+            style: ["sub", "b", "darkGray"]
+          },
+          {
+            text: `${prop.enum.join(", ")}`,
+            style: ["small", "lightGray", "mono"]
+          },
+        ],
       } as Content;
     }
     return {} as Content;
   }
 
-  public async genProp(prop: OpenAPIV3.SchemaObject): Promise<Content> {
+  protected async _genRequired(
+    required: boolean
+  ): Promise<Content> {
+    if (!required) {
+      return {} as Content;
+    }
+    return {
+      text: "required",
+      style: ["sub", "b", "red"]
+    } as Content;
+  }
+
+  public async genProp(
+    prop: OpenAPIV3.SchemaObject,
+    required: boolean
+  ): Promise<Content> {
     return [
-      // await this._genDefault(prop),
+      await this._genRequired(required),
+      await this._genDefault(prop),
       // await this._genPattern(prop),
       await this._genEnum(prop),
       await this._genDescr(prop)

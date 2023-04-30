@@ -21,6 +21,8 @@ abstract class MediaTreeBuilderBase {
     obj: OpenAPIV3.MediaTypeObject,
     // eslint-disable-next-line no-unused-vars
     openapi: OpenapiInfoV3,
+    // eslint-disable-next-line no-unused-vars
+    required: boolean
   ): Promise<Content>;
 }
 
@@ -67,7 +69,8 @@ export class MediaTreeBuilder extends MediaTreeBuilderBase {
   protected async _genTree(
     obj: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject,
     openapi: OpenapiInfoV3,
-    prevKey = ""
+    prevKey = "",
+    required = false,
   ): Promise<Content> {
     const schema = await this._getSchemaObj(
       obj,
@@ -81,7 +84,10 @@ export class MediaTreeBuilder extends MediaTreeBuilderBase {
       schema.type === "string"
     ) || schema.enum) {
 
-      const descrStack = await this._descriptionBuilder.genProp(schema);
+      const descrStack = await this._descriptionBuilder.genProp(
+        schema,
+        required
+      );
       const type = await this._descriptionBuilder.genType(schema);
       return [
         { text: prevKey, style: ["small", "mono"], margin: 0 },
@@ -147,11 +153,13 @@ export class MediaTreeBuilder extends MediaTreeBuilderBase {
     }
 
     if (schema.properties) {
+      const requiredSet = new Set(schema.required);
       for (const [name, prop] of Object.entries(schema.properties)) {
         const objectDef = await this._genTree(
           prop,
           openapi,
-          name
+          name,
+          requiredSet.has(name)
         );
         rows.push(objectDef);
       }
