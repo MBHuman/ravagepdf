@@ -1,6 +1,5 @@
 import { Content } from "pdfmake/interfaces";
 import { Localize } from "../types";
-import { PropDescription } from "../types/propDescription";
 import { OpenAPIV3 } from "openapi-types";
 
 

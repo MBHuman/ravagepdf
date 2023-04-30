@@ -40,8 +40,16 @@ export class MediaTreeBuilder extends MediaTreeBuilderBase {
         text: `${prevKey} ${obj.type === "array" ?
           "[" : "{"}`,
         style: ["small", "mono"]
-      }],
+      }] as Content[],
     };
+
+    if (obj.description) {
+      keyDef.stack.push({
+        text: obj.description ?? "",
+        style: ["sub", "gray"],
+        margin: [0, 0, 0, 4],
+      });
+    }
 
     return keyDef;
   }
