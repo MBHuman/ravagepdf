@@ -5,6 +5,7 @@ import { ResponsesBuilder } from "./responsesBuilder";
 import { OpenapiInfoV3, OperationObjectWithPath } from "../structures";
 import { OpenAPIV3 } from "openapi-types";
 import { markdownToPdfmake } from "../utils/markdown";
+import { PathParamsBuilder } from "./pathParamsBuilder";
 
 
 abstract class PathBuilderBase {
@@ -13,10 +14,12 @@ abstract class PathBuilderBase {
   protected _pdfStyle: PdfStyle;
   protected _header: Content[];
   protected _description: Content;
+  protected _pathParams: Content;
   protected _request: Content;
   protected _responses: Content;
   protected _requestBuilder: RequestBuilder;
   protected _responsesBuilder: ResponsesBuilder;
+  protected _pathParamsBuilder: PathParamsBuilder;
 
   constructor(
     localize: Localize,
@@ -26,6 +29,7 @@ abstract class PathBuilderBase {
     this._pdfStyle = pdfStyle;
     this._header = [] as Content[];
     this._description = {} as Content;
+    this._pathParams = {} as Content;
     this._request = {} as Content;
     this._responses = {} as Content;
     this._requestBuilder = new RequestBuilder(
@@ -33,6 +37,10 @@ abstract class PathBuilderBase {
       pdfStyle,
     );
     this._responsesBuilder = new ResponsesBuilder(
+      localize,
+      pdfStyle,
+    );
+    this._pathParamsBuilder = new PathParamsBuilder(
       localize,
       pdfStyle,
     );
@@ -49,6 +57,12 @@ abstract class PathBuilderBase {
   protected abstract _genDescription(
     // eslint-disable-next-line no-unused-vars
     operationObject: OperationObjectWithPath
+  ): Promise<Content>;
+  protected abstract _genPathParams(
+    // eslint-disable-next-line no-unused-vars
+    operationObject: OperationObjectWithPath,
+    // eslint-disable-next-line no-unused-vars
+    openapi: OpenapiInfoV3
   ): Promise<Content>;
   protected abstract _genRequest(
     // eslint-disable-next-line no-unused-vars
@@ -126,6 +140,15 @@ export class PathBuilder extends PathBuilderBase {
     };
     return content;
   }
+  protected async _genPathParams(
+    operationObject: OperationObjectWithPath,
+    openapi: OpenapiInfoV3,
+  ): Promise<Content> {
+    return this._pathParamsBuilder.genDef(
+      operationObject,
+      openapi,
+    );
+  }
   protected async _genRequest(
     operationObject: OperationObjectWithPath,
     openapi: OpenapiInfoV3
@@ -157,6 +180,7 @@ export class PathBuilder extends PathBuilderBase {
       operationObject,
     );
     this._description = await this._genDescription(operationObject);
+    this._pathParams = await this._genPathParams(operationObject, openapi);
     this._request = await this._genRequest(operationObject, openapi);
     this._responses = await this._genResponses(operationObject, openapi);
   }
@@ -176,6 +200,7 @@ export class PathBuilder extends PathBuilderBase {
     return [
       ...this._header,
       this._description,
+      this._pathParams,
       this._request,
       this._responses
     ] as Content[];
