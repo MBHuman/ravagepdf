@@ -23,7 +23,11 @@
     "test": "jest --config=jest.config.json",
     "lint": "eslint .",
     "lint-fix": "eslint --config ./.eslintrc.json --fix .",
-    "build": "tsc"
+    "build": "tsc",
+    "start": "node dist/bin/cli.js"
+  },
+  "bin": {
+    "openapi2pdf": "dist/bin/cli.js"
   },
   "repository": {
     "type": "git",

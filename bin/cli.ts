@@ -1,8 +1,26 @@
+#!/usr/bin/env node
+import yargs from "yargs";
 import { DocGeneratorPDF, PdfOptions, PdfStyle } from "../lib";
 
 // :TODO #9 Write tests for CLI
+const argv = yargs(process.argv.slice(2)).options({
+  spec: {
+    type: "string",
+    require: true,
+    description: "JSON, YML file or URL with openapi scpecification",
+    alias: "s",
+  },
+  out: {
+    type: "string",
+    require: true,
+    alias: "o",
+    description: "output file with pdf",
+  }
+}).parseSync();
 
-const api = "https://app.swaggerhub.com/apiproxy/registry/SAIDOVUMID7744_1/aiumid/1.0.0?resolved=true&flatten=true&pretty=true";
+console.log(argv.spec);
+
+// const api = "https://app.swaggerhub.com/apiproxy/registry/SAIDOVUMID7744_1/aiumid/1.0.0?resolved=true&flatten=true&pretty=true";
 // const api = "./files/file.json";
 const pdfStyle = {
   title: { fontSize: 32 },
@@ -93,7 +111,7 @@ const docGeneratorPDF = new DocGeneratorPDF(pdfStyle, pdfOptions);
 
 async function main() {
   const pdfDocument = await docGeneratorPDF
-    .createPdfAndWriteToFile(api, "./files/file.pdf");
+    .createPdfAndWriteToFile(argv.spec, argv.out);
   console.log(pdfDocument);
 }
 
