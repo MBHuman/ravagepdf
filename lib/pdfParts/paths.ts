@@ -17,6 +17,7 @@ export class PdfPartPaths extends PdfPartProcessor {
   public async genDef(
     openapiTree: OpenapiInfoV3,
     localize: Localize,
+    // eslint-disable-next-line no-unused-vars
     includeExample?: boolean
   ): Promise<Content> {
     const pathsTagBuilder = new PathsTagBuilder(localize, {} as PdfStyle);

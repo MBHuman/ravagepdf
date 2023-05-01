@@ -7,7 +7,7 @@ import { Localize } from "../types";
 export class PdfPartApiList extends PdfPartProcessor {
 
   /**
-   * :TODO fix incorrect render of table with styles
+   * 
    * @returns 
    */
   async genDef(

@@ -56,11 +56,13 @@ abstract class DescriptionBuilderBase {
 export class DescriptionBuilder extends DescriptionBuilderBase {
 
   protected async _genReadOrWrite(
+    // eslint-disable-next-line no-unused-vars
     prop: OpenAPIV3.SchemaObject
   ): Promise<Content> {
     throw new Error("Method not implemented");
   }
   protected async _genConstraints(
+    // eslint-disable-next-line no-unused-vars
     prop: OpenAPIV3.SchemaObject
   ): Promise<Content> {
     throw new Error("Method not implemented");

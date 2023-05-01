@@ -58,7 +58,6 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "@apidevtools/swagger-parser": "^10.1.0",
     "@readme/openapi-parser": "^2.5.0",
     "@types/yargs": "^17.0.24",
     "fs": "^0.0.1-security",
