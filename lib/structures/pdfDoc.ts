@@ -2,9 +2,8 @@ import { PdfStyle } from "../types/pdfStyle";
 import { PdfOptions } from "../types/pdfOptions";
 import {
   PdfPartApiList,
-  PdfPartInfo,
   PdfPartSecurity,
-  PdfPartBuilder
+  PdfPartInfo
 } from "../pdfParts";
 import { writeFileSync } from "fs";
 import {
@@ -15,6 +14,7 @@ import { PdfPartToc } from "../pdfParts/toc";
 import { PdfPartPaths } from "../pdfParts/paths";
 import { TCreatedPdf, createPdf } from "pdfmake/build/pdfmake";
 import { RobotoVFS } from "../fonts/roboto";
+import { PdfPartBuilder } from "../pdfParts/partBuilder";
 
 /**
  * PDFDoc is class that builds pdf document from OpenAPI specification.

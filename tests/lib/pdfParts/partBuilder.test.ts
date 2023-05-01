@@ -1,8 +1,9 @@
-import { PdfPartInfo } from "../../../lib/pdfParts";
-import { PdfPartApi } from "../../../lib/pdfParts";
-import { PdfPartBuilder } from "../../../lib/pdfParts";
-import { PdfPartProcessor } from "../../../lib/pdfParts";
-import { Localize, PdfStyle } from "../../../lib/types";
+import { PdfPartToc } from "../../../lib/pdfParts";
+import { PdfPartInfo } from "../../../lib/pdfParts/info";
+import { PdfPartBuilder } from "../../../lib/pdfParts/partBuilder";
+import { PdfPartProcessor } from "../../../lib/pdfParts/partProcessor";
+import { Localize } from "../../../lib/types/localize";
+import { PdfStyle } from "../../../lib/types/pdfStyle";
 
 describe("PdfPartBuilder", () => {
   let pdfPartBuilder: PdfPartBuilder;
@@ -81,7 +82,7 @@ describe("PdfPartBuilder", () => {
       mono: { font: "Courier", fontSize: 10 },
       monoSub: { font: "Courier", fontSize: 8 },
     };
-    mockPart1 = new PdfPartApi();
+    mockPart1 = new PdfPartToc();
     mockPart2 = new PdfPartInfo();
     pdfPartBuilder = new PdfPartBuilder(
       localize,
@@ -89,7 +90,7 @@ describe("PdfPartBuilder", () => {
       true /* includeExamples */,
     );
     // eslint-disable-next-line max-len
-    apiPath = "https://app.swaggerhub.com/apiproxy/registry/alexei-zaycev/VoiLOC/1.0.0?resolved=true&flatten=true&pretty=true";
+    apiPath = "https://app.swaggerhub.com/apiproxy/registry/SAIDOVUMID7744_1/aiumid/1.0.0?resolved=true&flatten=true&pretty=true";
   });
 
   describe("buildParts", () => {
@@ -107,7 +108,7 @@ describe("PdfPartBuilder", () => {
   describe("addPart", () => {
     it("should add a pdf part to the builder", async () => {
       // Create a mock PdfPartProcessor object
-      const mockPart = new PdfPartApi();
+      const mockPart = new PdfPartToc();
 
       // Call the method being tested
       await pdfPartBuilder.addPart(mockPart);
