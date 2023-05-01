@@ -1,4 +1,3 @@
-import SwaggerParser from "@apidevtools/swagger-parser";
 import OpenAPIParser from "@readme/openapi-parser";
 import { OpenAPIV3 } from "openapi-types";
 
