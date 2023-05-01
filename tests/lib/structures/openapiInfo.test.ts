@@ -9,8 +9,9 @@ describe("OpenapiInfoV3", () => {
 
   describe("parseAndBuild()", () => {
     it("should parse and build the OpenAPI document", async () => {
-       
-      const apiPath = "https://pak_tst005.smartpack.world/openapi.json";
+
+      // eslint-disable-next-line max-len
+      const apiPath = "https://app.swaggerhub.com/apiproxy/registry/SAIDOVUMID7744_1/aiumid/1.0.0?resolved=true&flatten=true&pretty=true";
       await openapiInfo.parseAndBuild(apiPath);
       expect(openapiInfo).toBeDefined();
       expect(openapiInfo.api).not.toBe({});
