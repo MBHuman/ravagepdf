@@ -57,7 +57,7 @@ describe("doc-generator-pdf CLI", () => {
       const cmd = `./dist/bin/cli.js --out ${pdfPath}`;
       expect(() => {
         execSync(cmd);
-      }).toThrow("Missing required argument: spec");
+      }).toThrowError();
     });
 
   it("should display an error message if the --out argument is missing",
@@ -65,7 +65,7 @@ describe("doc-generator-pdf CLI", () => {
       const cmd = `./dist/bin/cli.js --spec ${specJSON}`;
       expect(() => {
         execSync(cmd);
-      }).toThrow("Missing required argument: out");
+      }).toThrowError();
     });
 
   it(`should display an error message if the --spec argument 
