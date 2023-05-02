@@ -1,7 +1,8 @@
 {
   "ignorePatterns": [
     "node_modules/",
-    "dist/"
+    "dist/",
+    "docs/"
   ],
   "env": {
     "browser": true,
