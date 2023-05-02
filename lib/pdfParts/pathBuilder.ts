@@ -205,7 +205,7 @@ export class PathBuilder extends PathBuilderBase {
       ...this._header,
       this._description,
       this._pathParams,
-      this._request,
+      operationObject.method !== "get" ? this._request : {},
       this._responses
     ] as Content[];
   }

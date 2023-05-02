@@ -54,8 +54,10 @@ export class ExampleBuilder extends ExampleBuilderBase {
     const schema = await this._getSchemaObj(obj, openapi);
     const res = {} as { [key: string]: any };
     if (!schema.type) {
-      if (schema.anyOf || schema.oneOf) {
-        return [];
+      if (schema.anyOf && schema.anyOf.length > 0) {
+        return this._buildObj(schema.anyOf[0], openapi);
+      } else if (schema.oneOf && schema.oneOf.length > 0) {
+        return this._buildObj(schema.oneOf[0], openapi);
       }
       return res;
     }
