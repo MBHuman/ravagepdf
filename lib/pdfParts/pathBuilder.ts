@@ -110,14 +110,18 @@ export class PathBuilder extends PathBuilderBase {
       {
         text: [
           {
-            text: operationObject.deprecated ? "DEPRECATED " : ""
+            text: `${tagSeq}.${methodSeq} `
           },
           {
-            text: `${tagSeq}.${methodSeq} ${operationObject
-              .method.toUpperCase()} ${operationObject.path}`,
+            text: `${operationObject.method
+              .toUpperCase()} ${operationObject.path}`,
 
             decoration: operationObject.deprecated ? "lineThrough" : undefined
-          }],
+          },
+          {
+            text: operationObject.deprecated ? " DEPRECATED " : ""
+          },
+        ],
         tocItem: true,
         style: ["topMargin3", "mono", "p", "primary", "b"],
         tocStyle: ["small", "blue", "mono"],
