@@ -54,6 +54,11 @@ export class ExampleBuilder extends ExampleBuilderBase {
     const schema = await this._getSchemaObj(obj, openapi);
     const res = {} as { [key: string]: any };
     if (!schema.type) {
+      if (schema.anyOf && schema.anyOf.length > 0) {
+        return this._buildObj(schema.anyOf[0], openapi);
+      } else if (schema.oneOf && schema.oneOf.length > 0) {
+        return this._buildObj(schema.oneOf[0], openapi);
+      }
       return res;
     }
     if (schema.type === "array") {
@@ -70,9 +75,20 @@ export class ExampleBuilder extends ExampleBuilderBase {
           ) {
             res[name] = schemaProp.example ?
               schemaProp.example : schemaProp.default ?
-                schemaProp.default : schemaProp.type;
+                schemaProp.default : (
+                  schemaProp.enum &&
+                  schemaProp.enum.length > 0
+                ) ?
+                  schemaProp.enum[0] : (schemaProp.type ? (
+                    schemaProp.type === "boolean" ? false :
+                      schemaProp.type === "number" ? 0.0 :
+                        schemaProp.type === "integer" ? 0 :
+                          "string") : "");
+            schemaProp.type;
           } else if (schemaProp.type === "array") {
-            res[name] = await this._buildObj(schemaProp.items, openapi);
+            res[name] = [
+              await this._buildObj(schemaProp.items, openapi)
+            ];
           } else if (schemaProp.type === "object") {
             res[name] = await this._buildObj(schemaProp, openapi);
           } else {
@@ -98,6 +114,18 @@ export class ExampleBuilder extends ExampleBuilderBase {
           openapi
         );
       }
+    } else {
+      return schema.example ?
+        schema.example : schema.default ?
+          schema.default : (
+            schema.enum &&
+            schema.enum.length > 0
+          ) ?
+            schema.enum[0] : (schema.type ? (
+              schema.type === "boolean" ? false :
+                schema.type === "number" ? 0.0 :
+                  schema.type === "integer" ? 0 :
+                    "string") : "");
     }
     return res;
   }
