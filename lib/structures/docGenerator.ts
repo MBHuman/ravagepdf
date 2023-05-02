@@ -1,3 +1,4 @@
+import { OpenAPI } from "openapi-types";
 import { PdfOptions } from "../types";
 import { PdfStyle } from "../types/pdfStyle";
 import { PDFDoc } from "./pdfDoc";
@@ -33,7 +34,7 @@ export class DocGeneratorPDF {
    * relative to process.cwd(). In the browser, it's relative to the URL of
    * the page.
    */
-  public async createPdf(api: string): Promise<PDFDoc> {
+  public async createPdf(api: string | OpenAPI.Document): Promise<PDFDoc> {
     const doc = await this._pdfDoc.build(api);
     return new Promise((resolve) => {
       resolve(doc);
@@ -55,8 +56,15 @@ export class DocGeneratorPDF {
     });
   }
 
+  /**
+   * Method to create and write 
+   * 
+   * @param api 
+   * @param file 
+   * @returns 
+   */
   public async createPdfAndWriteToFile(
-    api: string,
+    api: string | OpenAPI.Document,
     file: string
   ): Promise<void> {
     const doc = await this._pdfDoc.build(api);

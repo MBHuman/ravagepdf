@@ -7,7 +7,11 @@ import { OpenAPIV3 } from "openapi-types";
 import { markdownToPdfmake } from "../utils/markdown";
 import { PathParamsBuilder } from "./pathParamsBuilder";
 
-
+/**
+ * PathBuilder generate Content block for path part of
+ * openapi specs and generates `header`, `description`, 
+ * `pathParams`, `request`, `responses`
+ */
 abstract class PathBuilderBase {
 
   protected _localize: Localize;
@@ -46,6 +50,13 @@ abstract class PathBuilderBase {
     );
   }
 
+  /**
+   * Generates header for path OperaitonObject
+   * 
+   * @param tagSeq 
+   * @param methodSeq 
+   * @param operationObject 
+   */
   protected abstract _genHeader(
     // eslint-disable-next-line no-unused-vars
     tagSeq: number,
@@ -54,22 +65,50 @@ abstract class PathBuilderBase {
     // eslint-disable-next-line no-unused-vars
     operationObject: OperationObjectWithPath
   ): Promise<Content[]>;
+
+  /**
+   * Generates description for path OperaitonObject
+   * 
+   * @param operationObject 
+   */
   protected abstract _genDescription(
     // eslint-disable-next-line no-unused-vars
     operationObject: OperationObjectWithPath
   ): Promise<Content>;
+
+  /**
+   * 
+   * Generates PathParams for path OperationObject
+   * 
+   * @param operationObject 
+   * @param openapi 
+   */
   protected abstract _genPathParams(
     // eslint-disable-next-line no-unused-vars
     operationObject: OperationObjectWithPath,
     // eslint-disable-next-line no-unused-vars
     openapi: OpenapiInfoV3
   ): Promise<Content>;
+
+  /**
+   * Generates request description for path Operationobject
+   * 
+   * @param operationObject 
+   * @param openapi 
+   */
   protected abstract _genRequest(
     // eslint-disable-next-line no-unused-vars
     operationObject: OperationObjectWithPath,
     // eslint-disable-next-line no-unused-vars
     openapi: OpenapiInfoV3
   ): Promise<Content>;
+
+  /**
+   * Generates response description for path OperationObject
+   * 
+   * @param operationObject 
+   * @param openapi 
+   */
   protected abstract _genResponses(
     // eslint-disable-next-line no-unused-vars
     operationObject: OperationObjectWithPath,
@@ -77,6 +116,14 @@ abstract class PathBuilderBase {
     openapi: OpenapiInfoV3
   ): Promise<Content>;
 
+  /**
+   * Build all content with declared methods
+   * 
+   * @param tagSeq 
+   * @param methodSeq 
+   * @param operationObject 
+   * @param openapi 
+   */
   protected abstract _buildContent(
     // eslint-disable-next-line no-unused-vars
     tagSeq: number,
@@ -88,6 +135,15 @@ abstract class PathBuilderBase {
     openapi: OpenapiInfoV3
   ): Promise<void>;
 
+  /**
+   * Generates path Content block for provided
+   * OperaiotnObject
+   * 
+   * @param tagSeq 
+   * @param methodSeq 
+   * @param operationObject 
+   * @param openapi 
+   */
   public abstract genPath(
     // eslint-disable-next-line no-unused-vars
     tagSeq: number,

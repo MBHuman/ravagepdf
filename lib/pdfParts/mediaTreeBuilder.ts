@@ -1,21 +1,89 @@
 import { OpenAPIV3 } from "openapi-types";
 import { Content, ContentStack } from "pdfmake/interfaces";
 import { DescriptionBuilder } from "./descriptionBuilder";
-import { Localize } from "../types";
+import { Localize, PdfStyle } from "../types";
 import { OpenapiInfoV3 } from "../structures";
 
+/**
+ * MediaTreeBuilderBase generates HTTP Body information from
+ * openapi, add description for all properties and information
+ * about AllOf, AnyOf, OneOf. Also It include composition of
+ * DescriptionBuilder and can be extended by multiple descriptionBuilder
+ * realisations with any variatives.
+ */
 abstract class MediaTreeBuilderBase {
 
   protected _descriptionBuilder: DescriptionBuilder;
   protected _localize: Localize;
+  protected _pdfStyle: PdfStyle;
 
-  constructor(localize: Localize) {
+  constructor(localize: Localize, pdfStyle: PdfStyle) {
     this._localize = localize;
+    this._pdfStyle = pdfStyle;
     this._descriptionBuilder = new DescriptionBuilder(
-      localize
+      localize,
+      pdfStyle
     );
   }
 
+  /**
+   * Generates open bracket and desctiption of open schema block
+   * 
+   * @param obj 
+   * @param openapi 
+   * @param prevKey 
+   */
+  protected abstract _genKeyDef(
+    // eslint-disable-next-line no-unused-vars
+    obj: OpenAPIV3.SchemaObject,
+    // eslint-disable-next-line no-unused-vars
+    openapi: OpenapiInfoV3,
+    // eslint-disable-next-line no-unused-vars
+    prevKey: string
+  ): Promise<Content>;
+
+  /**
+   * Get schema by $ref from openapi.components.schemas
+   * if it's OpenAPIV3.ReferenceObject or reutrns `obj`
+   * if it's not OpenAPIV3.ReferenceObject
+   * 
+   * @param obj 
+   * @param openapi 
+   */
+  protected abstract _getSchemaObj(
+    // eslint-disable-next-line no-unused-vars
+    obj: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject,
+    // eslint-disable-next-line no-unused-vars
+    openapi: OpenapiInfoV3
+  ): Promise<OpenAPIV3.SchemaObject>;
+
+  /**
+   * Generates Body tree by OpenAPIV3.ReferenceObject or
+   * OpenAPIV3.SchemaObject
+   * 
+   * @param obj 
+   * @param openapi 
+   * @param prevKey 
+   * @param required 
+   */
+  protected abstract _genTree(
+    // eslint-disable-next-line no-unused-vars
+    obj: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject,
+    // eslint-disable-next-line no-unused-vars
+    openapi: OpenapiInfoV3,
+    // eslint-disable-next-line no-unused-vars
+    prevKey?: string,
+    // eslint-disable-next-line no-unused-vars
+    required?: boolean
+  ): Promise<Content>;
+
+  /**
+   * Build Content block for OpenAPI Body schema
+   * 
+   * @param obj 
+   * @param openapi 
+   * @param required 
+   */
   public abstract build(
     // eslint-disable-next-line no-unused-vars
     obj: OpenAPIV3.MediaTypeObject,

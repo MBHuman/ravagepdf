@@ -1,8 +1,5 @@
 import { Content } from "pdfmake/interfaces";
 import { OpenapiInfoV3 } from "../structures";
-import { marked } from "marked";
-import htmlToPdfmake from "html-to-pdfmake";
-import { JSDOM } from "jsdom";
 import { Localize } from "../types";
 
 
@@ -16,26 +13,6 @@ import { Localize } from "../types";
  * @class PdfPartProcessorBase
  */
 abstract class PdfPartProcessorBase {
-
-  /**
-   * This method convert markdown string
-   * to pdfmake content blocks.
-   * 
-   * @example
-   * ```typescript
-   * async function main() {
-   *   const processor = new PdfPartProcessor();
-   *   const markdown = "# Header\n Paragraph text";
-   *   const result = await processor.markdownToPdfmake(markdown);
-   * }
-   * 
-   * main();
-   * ```
-   * 
-   * @param markdown 
-   */
-  // eslint-disable-next-line no-unused-vars
-  abstract markdownToPdfmake(markdown: string): Promise<Content>;
 
   /**
    * This method create pdfmake content blocks
@@ -77,13 +54,6 @@ abstract class PdfPartProcessorBase {
 }
 
 export class PdfPartProcessor extends PdfPartProcessorBase {
-  async markdownToPdfmake(markdown: string): Promise<Content> {
-    const html = await marked(markdown);
-    const { window } = new JSDOM();
-    return new Promise((resolve) => {
-      resolve(htmlToPdfmake(html, { window: window }) as Content[]);
-    });
-  }
   async genDef(
     // eslint-disable-next-line no-unused-vars
     openapiTree: OpenapiInfoV3,

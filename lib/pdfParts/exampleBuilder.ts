@@ -3,7 +3,24 @@ import { Localize, PdfStyle } from "../types";
 import { OpenAPIV3 } from "openapi-types";
 import { OpenapiInfoV3 } from "../structures";
 
-
+/**
+ * ExampleBuilder generates examples from OpenAPIV3.ReferenceObject
+ * of OpenAPIV3.SchemaObject with auto detect examples, default value,
+ * enum value 
+ * 
+ * if value has example it returns example
+ * 
+ * if value has default type instead example it returns default value
+ * 
+ * if value is enum, it returns first possible value
+ * 
+ * if value is integer returns 0
+ * 
+ * if value is boolean returns false
+ * 
+ * if value is string returns "string"
+ * 
+ */
 abstract class ExampleBuilderBase {
 
   protected _localize: Localize;
@@ -17,6 +34,55 @@ abstract class ExampleBuilderBase {
     this._pdfStyle = pdfStyle;
   }
 
+  /**
+   * Get schema from openapi.components.schemas, if `obj` is
+   * OpenAPIV3.SchemaObject it returns `obj`, otherwise it search
+   * OpenAPIV3.SchemaObject
+   * 
+   * @param obj 
+   * @param openapi 
+   */
+  protected abstract _getSchemaObj(
+    // eslint-disable-next-line no-unused-vars
+    obj: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject,
+    // eslint-disable-next-line no-unused-vars
+    openapi: OpenapiInfoV3
+  ): Promise<OpenAPIV3.SchemaObject>;
+
+
+  /**
+   * Build example with object type with recursive DFS algorithm on
+   * graph with nodes OpenAPIV3.ReferenceObject or OpenAPIV3.SchemaObject
+   * 
+   * @param obj 
+   * @param openapi 
+   */
+  protected abstract _buildObj(
+    // eslint-disable-next-line no-unused-vars
+    obj: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject,
+    // eslint-disable-next-line no-unused-vars
+    openapi: OpenapiInfoV3
+  ): Promise<object>;
+
+  /**
+   * Generates JSON string with indent for Content block example
+   * 
+   * @param obj 
+   * @param openapi 
+   */
+  protected abstract _genJsonString(
+    // eslint-disable-next-line no-unused-vars
+    obj: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject,
+    // eslint-disable-next-line no-unused-vars
+    openapi: OpenapiInfoV3
+  ): Promise<string>;
+
+  /**
+   * Build example and returns Content block with indent
+   * 
+   * @param schema 
+   * @param openapi 
+   */
   public abstract build(
     // eslint-disable-next-line no-unused-vars
     schema: OpenAPIV3.SchemaObject,

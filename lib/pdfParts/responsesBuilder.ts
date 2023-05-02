@@ -4,7 +4,10 @@ import { OpenAPIV3 } from "openapi-types";
 import { ResponseBuilder } from "./responseBuilder";
 import { OpenapiInfoV3 } from "../structures";
 
-
+/**
+ * ResponsesBuilderBase builds responses Content
+ * blocks for PathsTagBuilderBase
+ */
 abstract class ResponsesBuilderBase {
   protected _localize: Localize;
   protected _pdfStyle: PdfStyle;
@@ -22,8 +25,17 @@ abstract class ResponsesBuilderBase {
     );
   }
 
+  /**
+   * Generates header for responses
+   */
   protected abstract _genHeader(): Promise<Content>;
 
+  /**
+   * Generates Content block for reponses
+   * 
+   * @param responses 
+   * @param openapi 
+   */
   public abstract genDef(
     // eslint-disable-next-line no-unused-vars
     responses: OpenAPIV3.ResponsesObject,

@@ -4,6 +4,9 @@ import { Localize } from "../types";
 import { OpenapiInfoV3 } from "../structures";
 
 
+/**
+ * PdfPartToc generates toc part for pdf file
+ */
 export class PdfPartToc extends PdfPartProcessor {
 
 

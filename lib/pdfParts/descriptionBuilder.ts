@@ -1,50 +1,106 @@
 import { Content } from "pdfmake/interfaces";
-import { Localize } from "../types";
+import { Localize, PdfStyle } from "../types";
 import { OpenAPIV3 } from "openapi-types";
 
-
+/**
+ * DescriptionBuilder is class that can generate description Content blocks
+ * for MediaTreeBuilder by OpenAPIV3.SchemaObject
+ */
 abstract class DescriptionBuilderBase {
   protected _localize: Localize;
+  protected _pdfStyle: PdfStyle;
 
-  constructor(localize: Localize) {
+  constructor(localize: Localize, pdfStyle: PdfStyle) {
     this._localize = localize;
+    this._pdfStyle = pdfStyle;
   }
+
+  /**
+   * Generates Content block with read only or write only
+   * from OpenAPIV3.SchemaObject if it exists
+   * 
+   * @param prop 
+   */
   protected abstract _genReadOrWrite(
     // eslint-disable-next-line no-unused-vars
     prop: OpenAPIV3.SchemaObject
   ): Promise<Content>;
 
+  /**
+   * Generates Content block with min, max, inclusiveMax, inclusiveMin
+   * from OpenAPIV3.SchemaObject if it exists
+   * 
+   * @param prop 
+   */
   protected abstract _genConstraints(
     // eslint-disable-next-line no-unused-vars
     prop: OpenAPIV3.SchemaObject
   ): Promise<Content>;
 
+  /**
+   * Generates Content block with default value for propertie
+   * from OpenAPIV3.SchemaObject if it exists
+   * 
+   * @param prop 
+   */
   protected abstract _genDefault(
     // eslint-disable-next-line no-unused-vars
     prop: OpenAPIV3.SchemaObject
   ): Promise<Content>;
 
+  /**
+   * Generates Content block with pattern value
+   * from OpenAPIV3.SchemaObject if it exists
+   * 
+   * @param prop 
+   */
   protected abstract _genPattern(
     // eslint-disable-next-line no-unused-vars
     prop: OpenAPIV3.SchemaObject
   ): Promise<Content>;
 
+  /**
+   * Generates Content block with title
+   * from OpenAPIV3.SchemaObject if it exists
+   * 
+   * @param prop 
+   */
   protected abstract _genName(
     // eslint-disable-next-line no-unused-vars
     prop: OpenAPIV3.SchemaObject
   ): Promise<Content>;
 
+  /**
+   * Generates Content block with description from
+   * OpenAPIV3.SchemaObject if it exists
+   * 
+   * @param prop 
+   */
   protected abstract _genDescr(
     // eslint-disable-next-line no-unused-vars
     prop: OpenAPIV3.SchemaObject
   ): Promise<Content>;
 
+  /**
+   * 
+   * Generates Content blcok with required red flag
+   * from OpenAPIV3.SchemaObject if it exists
+   * 
+   * @param required 
+   */
   protected abstract _genRequired(
     // eslint-disable-next-line no-unused-vars
     required: boolean
   ): Promise<Content>;
 
-
+  /**
+   * 
+   * Generates Content block with desctiption for
+   * MediaTreeBuilder properties
+   * 
+   * @param prop 
+   * @param required 
+   */
   public abstract genProp(
     // eslint-disable-next-line no-unused-vars
     prop: OpenAPIV3.SchemaObject,

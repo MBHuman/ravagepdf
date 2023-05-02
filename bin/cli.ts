@@ -106,9 +106,8 @@ const pdfOptions = {
 const docGeneratorPDF = new DocGeneratorPDF(pdfStyle, pdfOptions);
 
 async function main() {
-  const pdfDocument = await docGeneratorPDF
+  await docGeneratorPDF
     .createPdfAndWriteToFile(argv.spec, argv.out);
-  console.log(pdfDocument);
 }
 
 main();

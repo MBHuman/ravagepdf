@@ -5,7 +5,10 @@ import { ExampleBuilder } from "./exampleBuilder";
 import { MediaTreeBuilder } from "./mediaTreeBuilder";
 import { OpenapiInfoV3 } from "../structures";
 
-
+/**
+ * RequestBuilderBase generates request information block with
+ * header, description, path params, body schema and examples
+ */
 abstract class RequestBuilderBase {
   protected _localize: Localize;
   protected _pdfStyle: PdfStyle;
@@ -23,12 +26,22 @@ abstract class RequestBuilderBase {
       pdfStyle,
     );
     this._mediaTreeBuilder = new MediaTreeBuilder(
-      localize
+      localize,
+      pdfStyle
     );
   }
 
+  /**
+   * Generates header for Request
+   */
   protected abstract _genHeader(): Promise<Content>;
 
+  /**
+   * Generates information about request
+   * 
+   * @param requestBody 
+   * @param openapi 
+   */
   protected abstract _genInfo(
     // eslint-disable-next-line no-unused-vars
     requestBody: OpenAPIV3.RequestBodyObject,
@@ -37,6 +50,12 @@ abstract class RequestBuilderBase {
   ): Promise<Content>;
 
 
+  /**
+   * Generates Request Content block
+   * 
+   * @param requestBody 
+   * @param openapi 
+   */
   public abstract genDef(
     // eslint-disable-next-line no-unused-vars
     requestBody: OpenAPIV3.RequestBodyObject,
