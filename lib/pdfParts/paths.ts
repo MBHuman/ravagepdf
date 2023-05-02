@@ -4,9 +4,18 @@ import { Localize, PdfStyle } from "../types";
 import { PdfPartProcessor } from "./partProcessor";
 import { PathsTagBuilder } from "./pathsTagBuilder";
 
-
+/**
+ * PdfPartPaths is PdfPart for PdfPartBuilder that can
+ * be added to pdf
+ */
 export class PdfPartPaths extends PdfPartProcessor {
 
+  /**
+   * Generates header for PdfPartPaths
+   * 
+   * @param localize 
+   * @returns 
+   */
   protected async _genHeader(localize: Localize): Promise<Content> {
     return {
       text: localize.api,

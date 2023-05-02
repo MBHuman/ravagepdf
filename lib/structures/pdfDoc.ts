@@ -15,6 +15,7 @@ import { PdfPartPaths } from "../pdfParts/paths";
 import { TCreatedPdf, createPdf } from "pdfmake/build/pdfmake";
 import { RobotoVFS } from "../fonts/roboto";
 import { PdfPartBuilder } from "../pdfParts/partBuilder";
+import { OpenAPI } from "openapi-types";
 
 /**
  * PDFDoc is class that builds pdf document from OpenAPI specification.
@@ -67,21 +68,13 @@ export class PDFDoc {
     } as Content;
   }
 
-
-  private async _genBuffer(pdfDocument: PDFKit.PDFDocument): Promise<Buffer> {
-    return new Promise((resolve) => {
-      const chunks: Buffer[] = [];
-      pdfDocument.on("data", function (chunk) {
-        chunks.push(chunk);
-      });
-      pdfDocument.on("end", function () {
-        resolve(Buffer.concat(chunks));
-      });
-      pdfDocument.end();
-    });
-  }
-
-  public async build(api: string): Promise<PDFDoc> {
+  /**
+   * Build pdf doc by PdfParts
+   * 
+   * @param api 
+   * @returns 
+   */
+  public async build(api: string | OpenAPI.Document): Promise<PDFDoc> {
     await this._pdfPartsBuilder.cleanParts();
     await this._pdfPartsBuilder.addParts([
       new PdfPartInfo(),
@@ -98,6 +91,12 @@ export class PDFDoc {
     });
   }
 
+  /**
+   * Writes pdf doc to file
+   * 
+   * @param filePath 
+   * @returns 
+   */
   public async writeToFile(
     filePath: string
   ): Promise<void> {

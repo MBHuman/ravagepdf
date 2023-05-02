@@ -4,6 +4,9 @@ import { OpenAPIV3 } from "openapi-types";
 import { OpenapiInfoV3, RowLinesTableLayout } from "../structures";
 import { Localize } from "../types";
 
+/**
+ * PdfPartSecurity generates pdf part for security schemas
+ */
 export class PdfPartSecurity extends PdfPartProcessor {
 
   private async _genTableContent(

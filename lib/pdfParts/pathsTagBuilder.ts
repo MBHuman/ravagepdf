@@ -3,7 +3,10 @@ import { Localize, PdfStyle } from "../types";
 import { PathBuilder } from "./pathBuilder";
 import { OpenapiInfoV3, OperationObjectWithPath } from "../structures";
 
-
+/**
+ * PathsTagBuilder generates Content tag block with
+ * paths that tag contains
+ */
 abstract class PathsTagBuilderBase {
 
   protected _localize: Localize;
@@ -22,9 +25,23 @@ abstract class PathsTagBuilderBase {
     );
   }
 
+  /**
+   * Generates header for PathTag Content
+   * 
+   * @param tag 
+   * @param tagSeq 
+   */
   // eslint-disable-next-line no-unused-vars
   protected abstract _genHeader(tag: string, tagSeq: number): Promise<Content>;
 
+  /**
+   * Generates tag Content with paths for pdf
+   * 
+   * @param tag 
+   * @param tagSeq 
+   * @param operationObjects 
+   * @param openapi 
+   */
   public abstract genTag(
     // eslint-disable-next-line no-unused-vars
     tag: string,

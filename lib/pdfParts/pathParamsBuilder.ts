@@ -7,6 +7,10 @@ import {
 } from "../structures";
 
 
+/**
+ * PathParamsBuilder generates information about 
+ * path queries for OperationObject
+ */
 abstract class PathParamsBuilderBase {
 
   protected _localize: Localize;
@@ -17,8 +21,44 @@ abstract class PathParamsBuilderBase {
     this._pdfStyle = pdfStyle;
   }
 
-
+  /**
+   * Genereates header Content block for PathParams
+   */
   protected abstract _genHeader(): Promise<Content>;
+
+  /**
+   * Returns query path param
+   * 
+   * @param param
+   * @param opeanapi 
+   */
+  protected abstract _getParam(
+    // eslint-disable-next-line no-unused-vars
+    param: OpenAPIV3.ReferenceObject | OpenAPIV3.ParameterObject,
+    // eslint-disable-next-line no-unused-vars
+    opeanapi: OpenapiInfoV3
+  ): Promise<OpenAPIV3.ParameterObject>;
+
+  /**
+   * Returns schemaObject from OpenAPIV3.ReferenceObject or
+   * from OpenAPIV3.SchemaObject
+   * 
+   * @param obj 
+   * @param openapi 
+   */
+  protected abstract _getSchemaObj(
+    // eslint-disable-next-line no-unused-vars
+    obj: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject,
+    // eslint-disable-next-line no-unused-vars
+    openapi: OpenapiInfoV3
+  ): Promise<OpenAPIV3.SchemaObject>;
+
+  /**
+   * Generates tableContent by operationObject
+   * 
+   * @param operationObj
+   * @param openapi 
+   */
   protected abstract _genTableContent(
     // eslint-disable-next-line no-unused-vars
     operationObj: OperationObjectWithPath,
@@ -26,6 +66,12 @@ abstract class PathParamsBuilderBase {
     openapi: OpenapiInfoV3
   ): Promise<Content>;
 
+  /**
+   * Generates Content block for table PathParamsBuilder
+   * 
+   * @param operationObj 
+   * @param openapi 
+   */
   public abstract genDef(
     // eslint-disable-next-line no-unused-vars
     operationObj: OperationObjectWithPath,

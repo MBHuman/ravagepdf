@@ -2,9 +2,21 @@ import { Content, ContentStack } from "pdfmake/interfaces";
 import { PdfPartProcessor } from "./partProcessor";
 import { OpenapiInfoV3 } from "../structures";
 import { Localize } from "../types";
+import { markdownToPdfmake } from "../utils/markdown";
 
+/**
+ * PdfPartInfo Content block for main page of pdf document
+ * that contains info from openapi info contact if it exists
+ */
 export class PdfPartInfo extends PdfPartProcessor {
 
+  /**
+   * Generates Content block with name from openapi file
+   * 
+   * @param openapiTree 
+   * @param localize 
+   * @returns 
+   */
   private async _genName(
     openapiTree: OpenapiInfoV3,
     localize: Localize,
@@ -23,6 +35,13 @@ export class PdfPartInfo extends PdfPartProcessor {
     });
   }
 
+  /**
+   * Generates Content block with email from openapi file
+   * 
+   * @param openapiTree 
+   * @param localize 
+   * @returns 
+   */
   private async _genEmail(
     openapiTree: OpenapiInfoV3,
     localize: Localize,
@@ -41,6 +60,13 @@ export class PdfPartInfo extends PdfPartProcessor {
     });
   }
 
+  /**
+   * Generates Content block with url from openapi file 
+   * 
+   * @param openapiTree 
+   * @param localize 
+   * @returns 
+   */
   private async _genUrl(
     openapiTree: OpenapiInfoV3,
     localize: Localize,
@@ -67,6 +93,13 @@ export class PdfPartInfo extends PdfPartProcessor {
     });
   }
 
+  /**
+   * Generates Content block with terms of service from openapi file
+   * 
+   * @param openapiTree 
+   * @param localize 
+   * @returns 
+   */
   private async _genTermsOfService(
     openapiTree: OpenapiInfoV3,
     localize: Localize,
@@ -92,15 +125,19 @@ export class PdfPartInfo extends PdfPartProcessor {
     });
   }
 
-
-
+  /**
+   * Generates Content block with description content block for main page
+   * 
+   * @param openapiTree 
+   * @returns 
+   */
   private async _genDescriptionFromMarkdown(
     openapiTree: OpenapiInfoV3,
   ): Promise<ContentStack> {
     let content = {} as ContentStack;
     if (openapiTree.info.description) {
       content = {
-        stack: await this.markdownToPdfmake(
+        stack: await markdownToPdfmake(
           openapiTree.info.description
         ) as Content[],
         style: ["topMargin3"],
@@ -111,6 +148,15 @@ export class PdfPartInfo extends PdfPartProcessor {
     });
   }
 
+  /**
+   * Generates Content block with contact for main page from
+   * openapi file
+   * 
+   * @param openapiTree 
+   * @param localize 
+   * @param includeExample 
+   * @returns 
+   */
   private async _genContact(
     openapiTree: OpenapiInfoV3,
     localize: Localize,
@@ -163,6 +209,10 @@ export class PdfPartInfo extends PdfPartProcessor {
   }
 }
 
+/**
+ * PdfPartInfoEmpty is empty info Part only with apiReference
+ * text from localize
+ */
 export class PdfPartInfoEmpty extends PdfPartProcessor {
 
   async genDef(

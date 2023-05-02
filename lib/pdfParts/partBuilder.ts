@@ -2,6 +2,7 @@ import { Content } from "pdfmake/interfaces";
 import { PdfPartProcessor } from "./partProcessor";
 import { Localize, PdfStyle } from "../types";
 import { OpenapiInfoV3 } from "../structures";
+import { OpenAPI } from "openapi-types";
 
 
 /**
@@ -84,7 +85,7 @@ abstract class PdfPartBuilderBase {
    * @param apiPath path to api specification file or url
    */
   // eslint-disable-next-line no-unused-vars
-  abstract buildParts(apiPath: string): Promise<Content>;
+  abstract buildParts(apiPath: string | OpenAPI.Document): Promise<Content>;
   /**
    * Add new part to array of parts
    * @example
@@ -146,7 +147,9 @@ abstract class PdfPartBuilderBase {
 
 export class PdfPartBuilder extends PdfPartBuilderBase {
 
-  public async buildParts(apiPath: string): Promise<Content> {
+  public async buildParts(
+    apiPath: string | OpenAPI.Document
+  ): Promise<Content> {
     await this._openapiInfo.parseAndBuild(apiPath);
     const promises = this._pdfParts.map((part) => part.genDef(
       this._openapiInfo,
