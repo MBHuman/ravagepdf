@@ -84,7 +84,9 @@ export class ExampleBuilder extends ExampleBuilderBase {
                           "string") : "");
             schemaProp.type;
           } else if (schemaProp.type === "array") {
-            res[name] = await this._buildObj(schemaProp.items, openapi);
+            res[name] = [
+              await this._buildObj(schemaProp.items, openapi)
+            ];
           } else if (schemaProp.type === "object") {
             res[name] = await this._buildObj(schemaProp, openapi);
           } else {
@@ -111,7 +113,17 @@ export class ExampleBuilder extends ExampleBuilderBase {
         );
       }
     } else {
-      return [];
+      return schema.example ?
+        schema.example : schema.default ?
+          schema.default : (
+            schema.enum &&
+            schema.enum.length > 0
+          ) ?
+            schema.enum[0] : (schema.type ? (
+              schema.type === "boolean" ? false :
+                schema.type === "number" ? 0.0 :
+                  schema.type === "integer" ? 0 :
+                    "string") : "");
     }
     return res;
   }
