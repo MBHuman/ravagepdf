@@ -54,6 +54,9 @@ export class ExampleBuilder extends ExampleBuilderBase {
     const schema = await this._getSchemaObj(obj, openapi);
     const res = {} as { [key: string]: any };
     if (!schema.type) {
+      if (schema.anyOf || schema.oneOf) {
+        return [];
+      }
       return res;
     }
     if (schema.type === "array") {
@@ -70,7 +73,16 @@ export class ExampleBuilder extends ExampleBuilderBase {
           ) {
             res[name] = schemaProp.example ?
               schemaProp.example : schemaProp.default ?
-                schemaProp.default : schemaProp.type;
+                schemaProp.default : (
+                  schemaProp.enum &&
+                  schemaProp.enum.length > 0
+                ) ?
+                  schemaProp.enum[0] : (schemaProp.type ? (
+                    schemaProp.type === "boolean" ? false :
+                      schemaProp.type === "number" ? 0.0 :
+                        schemaProp.type === "integer" ? 0 :
+                          "string") : "");
+            schemaProp.type;
           } else if (schemaProp.type === "array") {
             res[name] = await this._buildObj(schemaProp.items, openapi);
           } else if (schemaProp.type === "object") {
@@ -98,6 +110,8 @@ export class ExampleBuilder extends ExampleBuilderBase {
           openapi
         );
       }
+    } else {
+      return [];
     }
     return res;
   }
