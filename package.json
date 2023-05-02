@@ -24,7 +24,8 @@
     "lint": "eslint .",
     "lint-fix": "eslint --config ./.eslintrc.json --fix .",
     "build": "tsc",
-    "start": "node dist/bin/cli.js"
+    "start": "node dist/bin/cli.js",
+    "build-docs": "typedoc --out docs ./lib/**/*"
   },
   "bin": {
     "openapi2pdf": "dist/bin/cli.js"
@@ -55,6 +56,7 @@
     "prettier": "^2.8.7",
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
+    "typedoc": "^0.24.6",
     "typescript": "^5.0.4"
   },
   "dependencies": {

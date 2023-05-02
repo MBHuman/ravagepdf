@@ -12,7 +12,7 @@ import { PathParamsBuilder } from "./pathParamsBuilder";
  * openapi specs and generates `header`, `description`, 
  * `pathParams`, `request`, `responses`
  */
-abstract class PathBuilderBase {
+export abstract class PathBuilderBase {
 
   protected _localize: Localize;
   protected _pdfStyle: PdfStyle;

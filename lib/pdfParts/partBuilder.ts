@@ -22,7 +22,7 @@ import { OpenAPI } from "openapi-types";
  * @abstract
  * @class PdfPartBuilderBase
  */
-abstract class PdfPartBuilderBase {
+export abstract class PdfPartBuilderBase {
 
   protected _localization: Localize;
   protected _pdfStyle: PdfStyle;

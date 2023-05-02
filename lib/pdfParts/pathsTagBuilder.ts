@@ -7,7 +7,7 @@ import { OpenapiInfoV3, OperationObjectWithPath } from "../structures";
  * PathsTagBuilder generates Content tag block with
  * paths that tag contains
  */
-abstract class PathsTagBuilderBase {
+export abstract class PathsTagBuilderBase {
 
   protected _localize: Localize;
   protected _pdfStyle: PdfStyle;

@@ -21,7 +21,7 @@ import { OpenapiInfoV3 } from "../structures";
  * if value is string returns "string"
  * 
  */
-abstract class ExampleBuilderBase {
+export abstract class ExampleBuilderBase {
 
   protected _localize: Localize;
   protected _pdfStyle: PdfStyle;

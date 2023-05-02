@@ -11,7 +11,7 @@ import {
  * PathParamsBuilder generates information about 
  * path queries for OperationObject
  */
-abstract class PathParamsBuilderBase {
+export abstract class PathParamsBuilderBase {
 
   protected _localize: Localize;
   protected _pdfStyle: PdfStyle;

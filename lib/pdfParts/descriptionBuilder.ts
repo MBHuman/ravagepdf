@@ -6,7 +6,7 @@ import { OpenAPIV3 } from "openapi-types";
  * DescriptionBuilder is class that can generate description Content blocks
  * for MediaTreeBuilder by OpenAPIV3.SchemaObject
  */
-abstract class DescriptionBuilderBase {
+export abstract class DescriptionBuilderBase {
   protected _localize: Localize;
   protected _pdfStyle: PdfStyle;
 

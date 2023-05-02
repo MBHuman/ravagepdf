@@ -8,7 +8,7 @@ import { OpenapiInfoV3 } from "../structures";
  * ResponsesBuilderBase builds responses Content
  * blocks for PathsTagBuilderBase
  */
-abstract class ResponsesBuilderBase {
+export abstract class ResponsesBuilderBase {
   protected _localize: Localize;
   protected _pdfStyle: PdfStyle;
   protected _responseBuilder: ResponseBuilder;
