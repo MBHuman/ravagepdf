@@ -84,7 +84,6 @@ export class ExampleBuilder extends ExampleBuilderBase {
                       schemaProp.type === "number" ? 0.0 :
                         schemaProp.type === "integer" ? 0 :
                           "string") : "");
-            schemaProp.type;
           } else if (schemaProp.type === "array") {
             res[name] = [
               await this._buildObj(schemaProp.items, openapi)
