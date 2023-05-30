@@ -11,7 +11,7 @@ import { OpenapiInfoV3 } from "../structures";
  * DescriptionBuilder and can be extended by multiple descriptionBuilder
  * realisations with any variatives.
  */
-abstract class MediaTreeBuilderBase {
+export abstract class MediaTreeBuilderBase {
 
   protected _descriptionBuilder: DescriptionBuilder;
   protected _localize: Localize;

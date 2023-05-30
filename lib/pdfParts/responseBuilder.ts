@@ -9,7 +9,7 @@ import { OpenapiInfoV3 } from "../structures";
  * ResponseBuilderBase generates request information block with
  * header, description, path params, body schema and examples
  */
-abstract class ResponseBuilderBase {
+export abstract class ResponseBuilderBase {
 
   protected _localize: Localize;
   protected _pdfStyle: PdfStyle;

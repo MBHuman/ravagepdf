@@ -12,7 +12,7 @@ import { Localize } from "../types";
  * @abstract
  * @class PdfPartProcessorBase
  */
-abstract class PdfPartProcessorBase {
+export abstract class PdfPartProcessorBase {
 
   /**
    * This method create pdfmake content blocks

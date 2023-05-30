@@ -21,7 +21,7 @@ import { OpenapiInfoV3 } from "../structures";
  * if value is string returns "string"
  * 
  */
-abstract class ExampleBuilderBase {
+export abstract class ExampleBuilderBase {
 
   protected _localize: Localize;
   protected _pdfStyle: PdfStyle;
@@ -139,14 +139,14 @@ export class ExampleBuilder extends ExampleBuilderBase {
             schemaProp.type !== "array" &&
             schemaProp.type !== "object"
           ) {
-            res[name] = schemaProp.example ?
+            res[name] = typeof schemaProp.example !== "undefined" ?
               schemaProp.example : schemaProp.default ?
                 schemaProp.default : (
                   schemaProp.enum &&
                   schemaProp.enum.length > 0
                 ) ?
                   schemaProp.enum[0] : (schemaProp.type ? (
-                    schemaProp.type === "boolean" ? false :
+                    schemaProp.type === "boolean" ? true :
                       schemaProp.type === "number" ? 0.0 :
                         schemaProp.type === "integer" ? 0 :
                           "string") : "");
