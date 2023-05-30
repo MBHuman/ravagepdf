@@ -1,0 +1,21 @@
+name: Docs GH Pages
+
+on:
+  push:
+    branches: [ "main"]
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Add permitions to deployment.sh
+        run: chmod +x ./cicd/deployment.sh
+
+      - name: Run Deployment
+        run: ./cicd/deployment.sh
