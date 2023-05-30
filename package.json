@@ -71,6 +71,7 @@
     "marked": "^4.3.0",
     "openapi-types": "^12.1.0",
     "pdfkit": "^0.13.0",
-    "pdfmake": "^0.2.2"
+    "pdfmake": "^0.2.2",
+    "yargs": "^17.0.24"
   }
 }
