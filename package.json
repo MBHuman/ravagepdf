@@ -1,6 +1,6 @@
 {
   "name": "ravagepdf",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "PDF generation from OpenAPI / Swagger Spec",
   "keywords": [
     "OpenAPI",
@@ -41,7 +41,7 @@
   "bugs": {
     "url": "https://github.com/MBHuman/ravagepdf/issues"
   },
-  "homepage": "https://github.com/MBHuman/ravagepdf#readme",
+  "homepage": "https://mbhuman.github.io/ravagepdf",
   "devDependencies": {
     "@types/html-to-pdfmake": "^2.4.0",
     "@types/jest": "^29.5.0",
