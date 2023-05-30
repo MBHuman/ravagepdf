@@ -34,14 +34,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MBHuman/openapi2pdf.git"
+    "url": "git+https://github.com/MBHuman/ravagepdf.git"
   },
   "author": "Evgeny Dmitirev zenka712@mail.ru",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/MBHuman/openapi2pdf/issues"
+    "url": "https://github.com/MBHuman/ravagepdf/issues"
   },
-  "homepage": "https://github.com/MBHuman/openapi2pdf#readme",
+  "homepage": "https://github.com/MBHuman/ravagepdf#readme",
   "devDependencies": {
     "@types/html-to-pdfmake": "^2.4.0",
     "@types/jest": "^29.5.0",

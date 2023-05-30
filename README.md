@@ -44,25 +44,25 @@ ravagepdf -s openapi.yml -o pdfDocs.pdf
 
 ### Info
 
-![](https://github.com/MBHuman/openapi2pdf/blob/main/images/info.png)
+![](https://github.com/MBHuman/ravagepdf/blob/main/images/info.png)
 
 ### Index
 
-![](https://github.com/MBHuman/openapi2pdf/blob/main/images/index.png)
+![](https://github.com/MBHuman/ravagepdf/blob/main/images/index.png)
 
 ### Paths Header
 
-![](https://github.com/MBHuman/openapi2pdf/blob/main/images/paths_header.png)
+![](https://github.com/MBHuman/ravagepdf/blob/main/images/paths_header.png)
 
 ### Response Description
 
-![](https://github.com/MBHuman/openapi2pdf/blob/main/images/response_description.png)
+![](https://github.com/MBHuman/ravagepdf/blob/main/images/response_description.png)
 
 ### Example
 
-![](https://github.com/MBHuman/openapi2pdf/blob/main/images/example.png)
+![](https://github.com/MBHuman/ravagepdf/blob/main/images/example.png)
 
 ### API List
 
-![](https://github.com/MBHuman/openapi2pdf/blob/main/images/api_list.png)
+![](https://github.com/MBHuman/ravagepdf/blob/main/images/api_list.png)
 
