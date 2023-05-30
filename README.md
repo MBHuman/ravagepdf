@@ -19,6 +19,12 @@ Ravagepdf is a cli, with you can easily convert your openapi.json or openapi.yml
 
 ## Examples of usage
 
+### Installation
+
+```console
+npm i -g ravagepdf
+```
+
 ### Example with URL
 
 ```console
