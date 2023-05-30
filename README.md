@@ -44,21 +44,25 @@ openapi2pdf -s openapi.yml -o pdfDocs.pdf
 
 ### Info
 
-![](./images/info.png)
+![](https://github.com/MBHuman/openapi2pdf/blob/main/images/info.png)
 
 ### Index
 
-![](./images/index.png)
+![](https://github.com/MBHuman/openapi2pdf/blob/main/images/index.png)
 
 ### Paths Header
 
-![](./images/paths_header.png)
+![](https://github.com/MBHuman/openapi2pdf/blob/main/images/paths_header.png)
 
 ### Response Description
 
-![](./images/response_description.png)
+![](https://github.com/MBHuman/openapi2pdf/blob/main/images/response_description.png)
 
 ### Example
 
-![](./images/example.png)
+![](https://github.com/MBHuman/openapi2pdf/blob/main/images/example.png)
+
+### API List
+
+![](https://github.com/MBHuman/openapi2pdf/blob/main/images/api_list.png)
 
