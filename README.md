@@ -1,5 +1,7 @@
 # ravagepdf
 
+Check coverage
+
 ## Introduction
 
 Ravagepdf is a cli, with you can easily convert your openapi.json or openapi.yml specs from URL or from file to PDF with simple command. It takes few seconds to generate file. All methods are async, and can be used async within projects for async PDF generation.
