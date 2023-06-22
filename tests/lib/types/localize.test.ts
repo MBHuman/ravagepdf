@@ -1,7 +1,8 @@
-import { Localize } from ".../../../lib/types/localize";
+import { IRavageLocalize } from "../../../lib/types/options";
+
 
 describe("Localize type", () => {
-  let localize: Localize;
+  let localize: IRavageLocalize;
 
   beforeAll(() => {
     localize = {

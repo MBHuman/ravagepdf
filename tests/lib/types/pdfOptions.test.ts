@@ -1,25 +1,25 @@
-import { PdfOptions } from ".../../../lib/types/pdfOptions";
+import { IRavageOptions } from ".../../../lib/types/options";
 
 describe("PdfOptions type", () => {
-  let pdfOptions: PdfOptions;
+  let pdfOptions: IRavageOptions;
 
   beforeAll(() => {
     pdfOptions = {
-      pdfSortTags: false,
-      pdfPrimaryColor: "",
-      // pdfAlternateColor: '',
-      pdfTitle: "API Reference",
-      pdfCoverText: "",
-      pdfSecurityText: "",
-      pdfApiText: "",
-      pdfSchemaStyle: "object",
-      pdfFooterText: "",
-      includeInfo: true,
-      includeToc: true,
-      includeSecurity: true,
-      includeExample: true,
-      includeApiDetails: true,
-      includeApiList: true,
+      structure: {
+        pdfSortTags: false,
+        pdfPrimaryColor: "",
+        pdfTitle: "API Reference",
+        pdfCoverText: "",
+        pdfSecurityText: "",
+        pdfApiText: "",
+        pdfFooterText: "",
+        includeInfo: true,
+        includeToc: true,
+        includeSecurity: true,
+        includeExample: true,
+        includeApiDetails: true,
+        includeApiList: true,
+      },
       localize: {
         index: "INDEX",
         api: "API",

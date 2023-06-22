@@ -5,30 +5,106 @@ class RowLinesTableLayout implements CustomTableLayout {
     +vLineWidth(): number
     +hLineColor(i: number, node: ContentTable): string
 }
+interface IRavageOptions {
+    +localize?: IRavageLocalize | undefined
+    +style?: StyleDictionary | undefined
+    +examples?: IRavageExamples | undefined
+}
+interface IRavageExamples {
+    +includeRequestExamples?: boolean | undefined
+    +includeResponseExamples?: boolean | undefined
+}
+interface IRavageLocalize {
+    +index?: string | undefined
+    +api?: string | undefined
+    +apiList?: string | undefined
+    +apiReference?: string | undefined
+    +apiVersion?: string | undefined
+    +contact?: string | undefined
+    +name?: string | undefined
+    +email?: string | undefined
+    +url?: string | undefined
+    +termsOfService?: string | undefined
+    +securityAndAuthentication?: string | undefined
+    +securitySchemes?: string | undefined
+    +key?: string | undefined
+    +type?: string | undefined
+    +example?: string | undefined
+    +description?: string | undefined
+    +request?: string | undefined
+    +requestBody?: string | undefined
+    +response?: string | undefined
+    +responseModel?: string | undefined
+    +statusCode?: string | undefined
+    +deprecated?: string | undefined
+    +allowed?: string | undefined
+    +default?: string | undefined
+    +readOnly?: string | undefined
+    +writeOnly?: string | undefined
+    +enumValues?: string | undefined
+    +pattern?: string | undefined
+    +parameters?: string | undefined
+    +noRequestParameters?: string | undefined
+    +method?: string | undefined
+    +required?: string | undefined
+}
 abstract class PdfPartProcessorBase {
-    +{abstract} genDef(openapiTree: OpenapiInfoV3, localize: Localize, includeExample?: boolean | undefined): Promise<Content>
+    +{abstract} genDef(openapiTree: OpenapiInfoV3, options?: IRavageOptions | undefined): Promise<Content>
 }
 class PdfPartProcessor extends PdfPartProcessorBase {
-    +genDef(openapiTree: OpenapiInfoV3, localize: Localize, includeExample?: boolean | undefined): Promise<Content>
+    +genDef(openapiTree: OpenapiInfoV3, options?: IRavageOptions | undefined): Promise<Content>
+}
+enum RavageLocalizeEnum {
+    INDEX
+    API
+    API_LIST
+    API_REFERENCE
+    API_VERSION
+    CONTACT
+    NAME
+    EMAIL
+    URL
+    TERMS_OF_SERVICE
+    SECURITY_AND_AUTHENTICATION
+    SECURITY_SCHEMES
+    KEY
+    TYPE
+    EXAMPLE
+    DESCRIPTION
+    REQUEST
+    REQUEST_BODY
+    RESPONSES
+    RESPONSE_MODEL
+    STATUS_CODE
+    DEPRECATED
+    ALLOWED
+    DEFAULT
+    READ_ONLY
+    WRITE_ONLY
+    ENUM_VALUES
+    PATTERN
+    PARAMETERS
+    NO_REQUEST_PARAMETERS
+    METHOD
+    REQUIRED
 }
 class PdfPartApiList extends PdfPartProcessor {
-    +genDef(openapiTree: OpenapiInfoV3, localize: Localize, includeExample?: boolean | undefined): Promise<Content>
+    +genDef(openapiTree: OpenapiInfoV3, options?: IRavageOptions | undefined): Promise<Content>
 }
 class PdfPartInfo extends PdfPartProcessor {
-    -_genName(openapiTree: OpenapiInfoV3, localize: Localize): Promise<Content>
-    -_genEmail(openapiTree: OpenapiInfoV3, localize: Localize): Promise<Content>
-    -_genUrl(openapiTree: OpenapiInfoV3, localize: Localize): Promise<Content>
-    -_genTermsOfService(openapiTree: OpenapiInfoV3, localize: Localize): Promise<Content>
+    -_genName(openapiTree: OpenapiInfoV3, options?: IRavageOptions | undefined): Promise<Content>
+    -_genEmail(openapiTree: OpenapiInfoV3, options?: IRavageOptions | undefined): Promise<Content>
+    -_genUrl(openapiTree: OpenapiInfoV3, options?: IRavageOptions | undefined): Promise<Content>
+    -_genTermsOfService(openapiTree: OpenapiInfoV3, options?: IRavageOptions | undefined): Promise<Content>
     -_genDescriptionFromMarkdown(openapiTree: OpenapiInfoV3): Promise<ContentStack>
-    -_genContact(openapiTree: OpenapiInfoV3, localize: Localize, includeExample?: boolean | undefined): Promise<Content>
-    +genDef(openapiTree: OpenapiInfoV3, localize: Localize, includeExample?: boolean | undefined): Promise<Content>
+    -_genContact(openapiTree: OpenapiInfoV3, options?: IRavageOptions | undefined): Promise<Content>
+    +genDef(openapiTree: OpenapiInfoV3, options?: IRavageOptions | undefined): Promise<Content>
 }
 class PdfPartInfoEmpty extends PdfPartProcessor {
-    +genDef(openapiTree: OpenapiInfoV3, localize: Localize, includeExample?: boolean | undefined): Promise<Content>
+    +genDef(openapiTree: OpenapiInfoV3, options?: IRavageOptions | undefined): Promise<Content>
 }
 abstract class ExampleBuilderBase {
-    #_localize: Localize
-    #_pdfStyle: PdfStyle
+    #_options?: IRavageOptions | undefined
     #{abstract} _getSchemaObj(obj: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, openapi: OpenapiInfoV3): Promise<OpenAPIV3.SchemaObject>
     #{abstract} _buildObj(obj: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, openapi: OpenapiInfoV3): Promise<object>
     #{abstract} _genJsonString(obj: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, openapi: OpenapiInfoV3): Promise<string>
@@ -41,8 +117,7 @@ class ExampleBuilder extends ExampleBuilderBase {
     +build(obj: OpenAPIV3.MediaTypeObject, openapi: OpenapiInfoV3): Promise<Content>
 }
 abstract class DescriptionBuilderBase {
-    #_localize: Localize
-    #_pdfStyle: PdfStyle
+    #_options?: IRavageOptions | undefined
     #{abstract} _genReadOrWrite(prop: OpenAPIV3.SchemaObject): Promise<Content>
     #{abstract} _genConstraints(prop: OpenAPIV3.SchemaObject): Promise<Content>
     #{abstract} _genDefault(prop: OpenAPIV3.SchemaObject): Promise<Content>
@@ -66,8 +141,7 @@ class DescriptionBuilder extends DescriptionBuilderBase {
 }
 abstract class MediaTreeBuilderBase {
     #_descriptionBuilder: DescriptionBuilder
-    #_localize: Localize
-    #_pdfStyle: PdfStyle
+    #_options?: IRavageOptions | undefined
     #{abstract} _genKeyDef(obj: OpenAPIV3.SchemaObject, openapi: OpenapiInfoV3, prevKey: string): Promise<Content>
     #{abstract} _getSchemaObj(obj: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, openapi: OpenapiInfoV3): Promise<OpenAPIV3.SchemaObject>
     #{abstract} _genTree(obj: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, openapi: OpenapiInfoV3, prevKey?: string | undefined, required?: boolean | undefined): Promise<Content>
@@ -80,8 +154,7 @@ class MediaTreeBuilder extends MediaTreeBuilderBase {
     +build(obj: OpenAPIV3.MediaTypeObject, openapi: OpenapiInfoV3): Promise<Content>
 }
 abstract class RequestBuilderBase {
-    #_localize: Localize
-    #_pdfStyle: PdfStyle
+    #_options?: IRavageOptions | undefined
     #_exampleBuilder: ExampleBuilder
     #_mediaTreeBuilder: MediaTreeBuilder
     #{abstract} _genHeader(): Promise<Content>
@@ -94,8 +167,7 @@ class RequestBuilder extends RequestBuilderBase {
     +genDef(requestBody: OpenAPIV3.RequestBodyObject, openapi: OpenapiInfoV3): Promise<Content>
 }
 abstract class ResponseBuilderBase {
-    #_localize: Localize
-    #_pdfStyle: PdfStyle
+    #_options?: IRavageOptions | undefined
     #_exampleBuilder: ExampleBuilder
     #_mediaTreeBuilder: MediaTreeBuilder
     #{abstract} _genHeader(code: string, response: OpenAPIV3.ResponseObject): Promise<Content>
@@ -108,8 +180,7 @@ class ResponseBuilder extends ResponseBuilderBase {
     +genResponse(code: string, response: OpenAPIV3.ResponseObject, openapi: OpenapiInfoV3): Promise<Content>
 }
 abstract class ResponsesBuilderBase {
-    #_localize: Localize
-    #_pdfStyle: PdfStyle
+    #_options?: IRavageOptions | undefined
     #_responseBuilder: ResponseBuilder
     #{abstract} _genHeader(): Promise<Content>
     +{abstract} genDef(responses: OpenAPIV3.ResponsesObject, openapi: OpenapiInfoV3): Promise<Content>
@@ -119,8 +190,7 @@ class ResponsesBuilder extends ResponsesBuilderBase {
     +genDef(responses: OpenAPIV3.ResponsesObject, openapi: OpenapiInfoV3): Promise<Content>
 }
 abstract class PathParamsBuilderBase {
-    #_localize: Localize
-    #_pdfStyle: PdfStyle
+    #_options?: IRavageOptions | undefined
     #{abstract} _genHeader(): Promise<Content>
     #{abstract} _getParam(param: OpenAPIV3.ReferenceObject | OpenAPIV3.ParameterObject, opeanapi: OpenapiInfoV3): Promise<OpenAPIV3.ParameterObject>
     #{abstract} _getSchemaObj(obj: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, openapi: OpenapiInfoV3): Promise<OpenAPIV3.SchemaObject>
@@ -135,8 +205,7 @@ class PathParamsBuilder extends PathParamsBuilderBase {
     +genDef(operationObj: OperationObjectWithPath, openapi: OpenapiInfoV3): Promise<Content>
 }
 abstract class PathBuilderBase {
-    #_localize: Localize
-    #_pdfStyle: PdfStyle
+    #_options?: IRavageOptions | undefined
     #_header: Content[]
     #_description: Content
     #_pathParams: Content
@@ -163,8 +232,7 @@ class PathBuilder extends PathBuilderBase {
     +genPath(tagSeq: number, methodSeq: number, operationObject: OperationObjectWithPath, openapi: OpenapiInfoV3): Promise<Content>
 }
 abstract class PathsTagBuilderBase {
-    #_localize: Localize
-    #_pdfStyle: PdfStyle
+    #_options?: IRavageOptions | undefined
     #_pathBuilder: PathBuilder
     #{abstract} _genHeader(tag: string, tagSeq: number): Promise<Content>
     #{abstract} _genDescription(tag: string, openapi: OpenapiInfoV3): Promise<Content>
@@ -177,25 +245,23 @@ class PathsTagBuilder extends PathsTagBuilderBase {
     +genTag(tag: string, tagSeq: number, operationObjects: OperationObjectWithPath[], openapi: OpenapiInfoV3): Promise<Content>
 }
 class PdfPartPaths extends PdfPartProcessor {
-    #_genHeader(localize: Localize): Promise<Content>
-    +genDef(openapiTree: OpenapiInfoV3, localize: Localize, includeExample?: boolean | undefined): Promise<Content>
+    #_genHeader(options?: IRavageOptions | undefined): Promise<Content>
+    +genDef(openapiTree: OpenapiInfoV3, options?: IRavageOptions | undefined): Promise<Content>
 }
 class PdfPartSecurity extends PdfPartProcessor {
-    -_genTableContent(openapiTree: OpenapiInfoV3, localize: Localize, includeExample?: boolean | undefined): Promise<Content[]>
-    +genDef(openapiTree: OpenapiInfoV3, localize: Localize, includeExample?: boolean | undefined): Promise<Content>
+    -_genTableContent(openapiTree: OpenapiInfoV3, options?: IRavageOptions | undefined): Promise<Content[]>
+    +genDef(openapiTree: OpenapiInfoV3, options?: IRavageOptions | undefined): Promise<Content>
 }
 class PdfPartSecurityEmpty extends PdfPartProcessor {
-    +genDef(openapiTree: OpenapiInfoV3, localize: Localize, includeExample?: boolean | undefined): Promise<Content>
+    +genDef(openapiTree: OpenapiInfoV3, options?: IRavageOptions | undefined): Promise<Content>
 }
 class PdfPartToc extends PdfPartProcessor {
-    +genDef(openapiTree: OpenapiInfoV3, localize: Localize, includeExample?: boolean | undefined): Promise<Content>
+    +genDef(openapiTree: OpenapiInfoV3, options?: IRavageOptions | undefined): Promise<Content>
 }
 abstract class PdfPartBuilderBase {
-    #_localization: Localize
-    #_pdfStyle: PdfStyle
     #_pdfParts: PdfPartProcessor[]
     #_openapiInfo: OpenapiInfoV3
-    #_includeExamples: boolean | undefined
+    #_options?: IRavageOptions | undefined
     +{abstract} buildParts(apiPath: string | OpenAPI.Document<{}>): Promise<Content>
     +{abstract} addPart(part: PdfPartProcessor): Promise<void>
     +{abstract} addParts(parts: PdfPartProcessor[]): Promise<void>
@@ -210,8 +276,7 @@ class PdfPartBuilder extends PdfPartBuilderBase {
 class PDFDoc {
     -_pdfPartsBuilder: PdfPartBuilder
     -_allContent: Content
-    -_styles: PdfStyle
-    -_options: PdfOptions
+    -_options: IRavageOptions
     -_documentDef: TDocumentDefinitions
     -_doc: TCreatedPdf
     -_footer(currentPage: number, pageCount: number): Content
@@ -219,10 +284,9 @@ class PDFDoc {
     +writeToFile(filePath: string): Promise<void>
 }
 class DocGeneratorPDF {
-    -_pdfStyle: PdfStyle
-    -_pdfOptions: PdfOptions
+    -_options: IRavageOptions
     -_pdfDoc: PDFDoc
-    +pdfStyles: PdfStyle
+    +pdfStyles: StyleDictionary
     +createPdf(api: string | OpenAPI.Document<{}>): Promise<PDFDoc>
     +writeToFile(pdfDocument: PDFDoc, file: string): Promise<void>
     +createPdfAndWriteToFile(api: string | OpenAPI.Document<{}>, file: string): Promise<void>

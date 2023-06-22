@@ -4,6 +4,7 @@ export interface IRavageOptions {
     localize?: IRavageLocalize;
     style?: StyleDictionary;
     examples?: IRavageExamples;
+    structure?: IRavageStructure;
 }
 
 export interface IRavageExamples {
@@ -44,4 +45,20 @@ export interface IRavageLocalize {
     noRequestParameters?: string;
     method?: string;
     required?: string;
+}
+
+export interface IRavageStructure {
+    pdfSortTags?: boolean;
+    pdfPrimaryColor?: string,
+    pdfTitle?: string;
+    pdfCoverText?: string;
+    pdfSecurityText?: string;
+    pdfApiText?: string;
+    pdfFooterText?: string;
+    includeInfo?: boolean;
+    includeToc?: boolean;
+    includeSecurity?: boolean;
+    includeExample?: boolean;
+    includeApiDetails?: boolean;
+    includeApiList?: boolean;
 }
