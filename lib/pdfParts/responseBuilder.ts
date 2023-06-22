@@ -1,9 +1,10 @@
 import { Content } from "pdfmake/interfaces";
-import { Localize, PdfStyle } from "../types";
+import { RavageLocalizeEnum } from "../types";
 import { OpenAPIV3 } from "openapi-types";
 import { ExampleBuilder } from "./exampleBuilder";
 import { MediaTreeBuilder } from "./mediaTreeBuilder";
 import { OpenapiInfoV3 } from "../structures";
+import { IRavageOptions } from "../types/options";
 
 /**
  * ResponseBuilderBase generates request information block with
@@ -11,24 +12,18 @@ import { OpenapiInfoV3 } from "../structures";
  */
 export abstract class ResponseBuilderBase {
 
-  protected _localize: Localize;
-  protected _pdfStyle: PdfStyle;
+  protected _options?: IRavageOptions;
   protected _exampleBuilder: ExampleBuilder;
   protected _mediaTreeBuilder: MediaTreeBuilder;
 
   constructor(
-    localize: Localize,
-    pdfStyle: PdfStyle,
+    options?: IRavageOptions
   ) {
-    this._localize = localize;
-    this._pdfStyle = pdfStyle;
     this._exampleBuilder = new ExampleBuilder(
-      localize,
-      pdfStyle,
+      options
     );
     this._mediaTreeBuilder = new MediaTreeBuilder(
-      localize,
-      pdfStyle
+      options
     );
   }
 
@@ -79,7 +74,8 @@ export class ResponseBuilder extends ResponseBuilderBase {
   ): Promise<Content> {
     return {
       text: [{
-        text: `${this._localize.statusCode} - ${code}: `,
+        text: `${this._options?.localize?.statusCode ??
+          RavageLocalizeEnum.STATUS_CODE} - ${code}: `,
         style: ["small", "b"]
       },
       {
@@ -101,13 +97,15 @@ export class ResponseBuilder extends ResponseBuilderBase {
     for (const [type, mediaObject] of Object.entries(responseBody.content)) {
       content.push([
         {
-          text: `${this._localize.responseModel} - ${type}`,
+          text: `${this._options?.localize?.responseModel ??
+            RavageLocalizeEnum.RESPONSE_MODEL} - ${type}`,
           margin: [0, 10, 0, 0],
           style: ["small", "b"]
         },
         await this._mediaTreeBuilder.build(mediaObject, openapi),
         {
-          text: this._localize.example,
+          text: this._options?.localize?.example ??
+            RavageLocalizeEnum.EXAMPLE,
           margin: [0, 10, 0, 0],
           style: ["small", "b", "blue"]
         },

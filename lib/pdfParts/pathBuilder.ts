@@ -1,11 +1,11 @@
 import { Content } from "pdfmake/interfaces";
-import { Localize, PdfStyle } from "../types";
 import { RequestBuilder } from "./requestBuilder";
 import { ResponsesBuilder } from "./responsesBuilder";
 import { OpenapiInfoV3, OperationObjectWithPath } from "../structures";
 import { OpenAPIV3 } from "openapi-types";
 import { markdownToPdfmake } from "../utils/markdown";
 import { PathParamsBuilder } from "./pathParamsBuilder";
+import { IRavageOptions } from "../types/options";
 
 /**
  * PathBuilder generate Content block for path part of
@@ -14,8 +14,7 @@ import { PathParamsBuilder } from "./pathParamsBuilder";
  */
 export abstract class PathBuilderBase {
 
-  protected _localize: Localize;
-  protected _pdfStyle: PdfStyle;
+  protected _options?: IRavageOptions;
   protected _header: Content[];
   protected _description: Content;
   protected _pathParams: Content;
@@ -26,27 +25,22 @@ export abstract class PathBuilderBase {
   protected _pathParamsBuilder: PathParamsBuilder;
 
   constructor(
-    localize: Localize,
-    pdfStyle: PdfStyle
+    options?: IRavageOptions
   ) {
-    this._localize = localize;
-    this._pdfStyle = pdfStyle;
+    this._options = options;
     this._header = [] as Content[];
     this._description = {} as Content;
     this._pathParams = {} as Content;
     this._request = {} as Content;
     this._responses = {} as Content;
     this._requestBuilder = new RequestBuilder(
-      localize,
-      pdfStyle,
+      options
     );
     this._responsesBuilder = new ResponsesBuilder(
-      localize,
-      pdfStyle,
+      options
     );
     this._pathParamsBuilder = new PathParamsBuilder(
-      localize,
-      pdfStyle,
+      options
     );
   }
 

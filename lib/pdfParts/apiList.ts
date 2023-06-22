@@ -1,7 +1,8 @@
 import { Content, ContentStack, ContentTable } from "pdfmake/interfaces";
 import { PdfPartProcessor } from "./partProcessor";
 import { OpenapiInfoV3, RowLinesTableLayout } from "../structures";
-import { Localize } from "../types";
+import { IRavageOptions } from "../types/options";
+import { RavageLocalizeEnum } from "../types";
 
 
 export class PdfPartApiList extends PdfPartProcessor {
@@ -12,13 +13,11 @@ export class PdfPartApiList extends PdfPartProcessor {
    */
   async genDef(
     openapiTree: OpenapiInfoV3,
-    localize: Localize,
-    // eslint-disable-next-line no-unused-vars
-    includeExample?: boolean
+    options?: IRavageOptions
   ): Promise<Content> {
     const content: Content[] = [
       {
-        text: localize.apiList,
+        text: options?.localize?.apiList ?? RavageLocalizeEnum.API_LIST,
         style: ["h3", "b"],
         pageBreak: "before"
       }
@@ -28,8 +27,14 @@ export class PdfPartApiList extends PdfPartProcessor {
       .forEach(([tag, paths]) => {
         const tableContent = [
           [
-            { text: localize.method, style: ["small", "b"] },
-            { text: localize.api, style: ["small", "b"] },
+            {
+              text: options?.localize?.method ?? RavageLocalizeEnum.METHOD,
+              style: ["small", "b"]
+            },
+            {
+              text: options?.localize?.api ?? RavageLocalizeEnum.API,
+              style: ["small", "b"]
+            },
           ],
         ] as Content[];
         paths.map((path) => {

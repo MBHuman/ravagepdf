@@ -2,7 +2,8 @@ import { Content, ContentTable } from "pdfmake/interfaces";
 import { PdfPartProcessor } from "./partProcessor";
 import { OpenAPIV3 } from "openapi-types";
 import { OpenapiInfoV3, RowLinesTableLayout } from "../structures";
-import { Localize } from "../types";
+import { RavageLocalizeEnum } from "../types";
+import { IRavageOptions } from "../types/options";
 
 /**
  * PdfPartSecurity generates pdf part for security schemas
@@ -11,9 +12,7 @@ export class PdfPartSecurity extends PdfPartProcessor {
 
   private async _genTableContent(
     openapiTree: OpenapiInfoV3,
-    localize: Localize,
-    // eslint-disable-next-line no-unused-vars
-    includeExample?: boolean
+    options?: IRavageOptions
   ): Promise<Content[]> {
     let tableContent = [] as Content[];
     if (!openapiTree.components.securitySchemes) {
@@ -23,9 +22,21 @@ export class PdfPartSecurity extends PdfPartProcessor {
     }
     tableContent = [
       [
-        { text: localize.key, style: ["small", "b"] },
-        { text: localize.type, style: ["small", "b"] },
-        { text: localize.description, style: ["small", "b"] },
+        {
+          text: options?.localize?.key ??
+            RavageLocalizeEnum.KEY,
+          style: ["small", "b"]
+        },
+        {
+          text: options?.localize?.type ??
+            RavageLocalizeEnum.TYPE,
+          style: ["small", "b"]
+        },
+        {
+          text: options?.localize?.description ??
+            RavageLocalizeEnum.DESCRIPTION,
+          style: ["small", "b"]
+        },
       ]
     ];
     Object.entries(openapiTree.components.securitySchemes as
@@ -48,8 +59,7 @@ export class PdfPartSecurity extends PdfPartProcessor {
 
   async genDef(
     openapiTree: OpenapiInfoV3,
-    localize: Localize,
-    includeExample?: boolean
+    options?: IRavageOptions
   ): Promise<Content> {
     let content = [] as Content[];
     if (!openapiTree.components.securitySchemes) {
@@ -59,17 +69,18 @@ export class PdfPartSecurity extends PdfPartProcessor {
     }
     const tableContent = await this._genTableContent(
       openapiTree,
-      localize,
-      includeExample
+      options
     );
 
     content = [
       {
-        text: localize.securityAndAuthentication,
+        text: options?.localize?.securityAndAuthentication ??
+          RavageLocalizeEnum.SECURITY_AND_AUTHENTICATION,
         style: ["h3", "b", "primary", "right", "topMargin3"]
       },
       {
-        text: localize.securitySchemes,
+        text: options?.localize?.securitySchemes ??
+          RavageLocalizeEnum.SECURITY_SCHEMES,
         style: ["b", "tableMargin"]
       },
     ];
@@ -93,9 +104,7 @@ export class PdfPartSecurityEmpty extends PdfPartProcessor {
     // eslint-disable-next-line no-unused-vars
     openapiTree: OpenapiInfoV3,
     // eslint-disable-next-line no-unused-vars
-    localize: Localize,
-    // eslint-disable-next-line no-unused-vars
-    includeExample?: boolean
+    options?: IRavageOptions
   ): Promise<Content> {
     const content: Content[] = [];
     return new Promise((resolve) => {

@@ -1,6 +1,6 @@
 import { Content } from "pdfmake/interfaces";
 import { OpenapiInfoV3 } from "../structures";
-import { Localize } from "../types";
+import { IRavageOptions } from "../types/options";
 
 
 /**
@@ -47,9 +47,7 @@ export abstract class PdfPartProcessorBase {
     // eslint-disable-next-line no-unused-vars
     openapiTree: OpenapiInfoV3,
     // eslint-disable-next-line no-unused-vars
-    localize: Localize,
-    // eslint-disable-next-line no-unused-vars
-    includeExample?: boolean
+    options?: IRavageOptions
   ): Promise<Content>;
 }
 
@@ -58,9 +56,7 @@ export class PdfPartProcessor extends PdfPartProcessorBase {
     // eslint-disable-next-line no-unused-vars
     openapiTree: OpenapiInfoV3,
     // eslint-disable-next-line no-unused-vars
-    localize: Localize,
-    // eslint-disable-next-line no-unused-vars
-    includeExample?: boolean
+    options?: IRavageOptions
   ): Promise<Content> {
     throw new Error("Method not implemented.");
   }

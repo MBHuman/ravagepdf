@@ -1,7 +1,7 @@
 import { Content, Table } from "pdfmake/interfaces";
-import { Localize, PdfStyle } from "../types";
 import { OpenAPIV3 } from "openapi-types";
 import { OpenapiInfoV3 } from "../structures";
+import { IRavageOptions } from "../types/options";
 
 /**
  * ExampleBuilder generates examples from OpenAPIV3.ReferenceObject
@@ -23,15 +23,12 @@ import { OpenapiInfoV3 } from "../structures";
  */
 export abstract class ExampleBuilderBase {
 
-  protected _localize: Localize;
-  protected _pdfStyle: PdfStyle;
+  protected _options?: IRavageOptions;
 
   constructor(
-    localize: Localize,
-    pdfStyle: PdfStyle
+    options?: IRavageOptions
   ) {
-    this._localize = localize;
-    this._pdfStyle = pdfStyle;
+    this._options = options;
   }
 
   /**

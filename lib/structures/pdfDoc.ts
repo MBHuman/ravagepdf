@@ -1,5 +1,3 @@
-import { PdfStyle } from "../types/pdfStyle";
-import { PdfOptions } from "../types/pdfOptions";
 import {
   PdfPartApiList,
   PdfPartSecurity,
@@ -8,7 +6,7 @@ import {
 import { writeFileSync } from "fs";
 import {
   Content, TDocumentDefinitions,
-  StyleDictionary
+  StyleDictionary,
 } from "pdfmake/interfaces";
 import { PdfPartToc } from "../pdfParts/toc";
 import { PdfPartPaths } from "../pdfParts/paths";
@@ -16,6 +14,8 @@ import { TCreatedPdf, createPdf } from "pdfmake/build/pdfmake";
 import { RobotoVFS } from "../fonts/roboto";
 import { PdfPartBuilder } from "../pdfParts/partBuilder";
 import { OpenAPI } from "openapi-types";
+import { IRavageOptions } from "../types/options";
+import { RavageStyle } from "../types/style";
 
 /**
  * PDFDoc is class that builds pdf document from OpenAPI specification.
@@ -24,26 +24,29 @@ import { OpenAPI } from "openapi-types";
 export class PDFDoc {
   private _pdfPartsBuilder: PdfPartBuilder;
   private _allContent: Content;
-  private _styles: PdfStyle;
-  private _options: PdfOptions;
+  private _options: IRavageOptions;
   private _documentDef: TDocumentDefinitions;
   private _doc: TCreatedPdf;
 
-  constructor(styles: PdfStyle, options: PdfOptions) {
+  constructor(options?: IRavageOptions) {
     this._allContent = [];
-    this._styles = styles;
-    this._options = options;
+    this._options = options ?? {};
     this._doc = {} as TCreatedPdf;
     this._pdfPartsBuilder = new PdfPartBuilder(
-      this._options.localize,
-      this._styles
+      this._options
     );
 
+    const style = {
+      ...RavageStyle,
+      ...options?.style
+    } as StyleDictionary;
+
+    this._options.style = style;
 
     this._documentDef = {
       footer: this._footer,
       content: [] as Content[],
-      styles: this._styles as StyleDictionary,
+      styles: this._options?.style as StyleDictionary,
       defaultStyle: {
         fontSize: 12,
         font: "Roboto",

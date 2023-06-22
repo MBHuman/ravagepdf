@@ -1,9 +1,9 @@
 import { Content } from "pdfmake/interfaces";
-import { Localize, PdfStyle } from "../types";
 import { PathBuilder } from "./pathBuilder";
 import { OpenapiInfoV3, OperationObjectWithPath } from "../structures";
 import { OpenAPIV3 } from "openapi-types";
 import { markdownToPdfmake } from "../utils/markdown";
+import { IRavageOptions } from "../types/options";
 
 /**
  * PathsTagBuilder generates Content tag block with
@@ -11,19 +11,15 @@ import { markdownToPdfmake } from "../utils/markdown";
  */
 export abstract class PathsTagBuilderBase {
 
-  protected _localize: Localize;
-  protected _pdfStyle: PdfStyle;
+  protected _options?: IRavageOptions;
   protected _pathBuilder: PathBuilder;
 
   constructor(
-    localize: Localize,
-    pdfStyle: PdfStyle
+    options?:IRavageOptions
   ) {
-    this._localize = localize;
-    this._pdfStyle = pdfStyle;
+    this._options = options;
     this._pathBuilder = new PathBuilder(
-      localize,
-      pdfStyle
+      options
     );
   }
 
