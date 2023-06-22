@@ -1,0 +1,252 @@
+@startuml
+left to right direction
+class RowLinesTableLayout implements CustomTableLayout {
+    +hLineWidth(i: number, node: ContentTable): number
+    +vLineWidth(): number
+    +hLineColor(i: number, node: ContentTable): string
+}
+abstract class PdfPartProcessorBase {
+    +{abstract} genDef(openapiTree: OpenapiInfoV3, localize: Localize, includeExample?: boolean | undefined): Promise<Content>
+}
+class PdfPartProcessor extends PdfPartProcessorBase {
+    +genDef(openapiTree: OpenapiInfoV3, localize: Localize, includeExample?: boolean | undefined): Promise<Content>
+}
+class PdfPartApiList extends PdfPartProcessor {
+    +genDef(openapiTree: OpenapiInfoV3, localize: Localize, includeExample?: boolean | undefined): Promise<Content>
+}
+class PdfPartInfo extends PdfPartProcessor {
+    -_genName(openapiTree: OpenapiInfoV3, localize: Localize): Promise<Content>
+    -_genEmail(openapiTree: OpenapiInfoV3, localize: Localize): Promise<Content>
+    -_genUrl(openapiTree: OpenapiInfoV3, localize: Localize): Promise<Content>
+    -_genTermsOfService(openapiTree: OpenapiInfoV3, localize: Localize): Promise<Content>
+    -_genDescriptionFromMarkdown(openapiTree: OpenapiInfoV3): Promise<ContentStack>
+    -_genContact(openapiTree: OpenapiInfoV3, localize: Localize, includeExample?: boolean | undefined): Promise<Content>
+    +genDef(openapiTree: OpenapiInfoV3, localize: Localize, includeExample?: boolean | undefined): Promise<Content>
+}
+class PdfPartInfoEmpty extends PdfPartProcessor {
+    +genDef(openapiTree: OpenapiInfoV3, localize: Localize, includeExample?: boolean | undefined): Promise<Content>
+}
+abstract class ExampleBuilderBase {
+    #_localize: Localize
+    #_pdfStyle: PdfStyle
+    #{abstract} _getSchemaObj(obj: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, openapi: OpenapiInfoV3): Promise<OpenAPIV3.SchemaObject>
+    #{abstract} _buildObj(obj: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, openapi: OpenapiInfoV3): Promise<object>
+    #{abstract} _genJsonString(obj: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, openapi: OpenapiInfoV3): Promise<string>
+    +{abstract} build(schema: OpenAPIV3.SchemaObject, openapi: OpenapiInfoV3): Promise<Content>
+}
+class ExampleBuilder extends ExampleBuilderBase {
+    #_getSchemaObj(obj: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, openapi: OpenapiInfoV3): Promise<OpenAPIV3.SchemaObject>
+    #_buildObj(obj: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, openapi: OpenapiInfoV3): Promise<object>
+    #_genJsonString(obj: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, openapi: OpenapiInfoV3): Promise<string>
+    +build(obj: OpenAPIV3.MediaTypeObject, openapi: OpenapiInfoV3): Promise<Content>
+}
+abstract class DescriptionBuilderBase {
+    #_localize: Localize
+    #_pdfStyle: PdfStyle
+    #{abstract} _genReadOrWrite(prop: OpenAPIV3.SchemaObject): Promise<Content>
+    #{abstract} _genConstraints(prop: OpenAPIV3.SchemaObject): Promise<Content>
+    #{abstract} _genDefault(prop: OpenAPIV3.SchemaObject): Promise<Content>
+    #{abstract} _genPattern(prop: OpenAPIV3.SchemaObject): Promise<Content>
+    #{abstract} _genName(prop: OpenAPIV3.SchemaObject): Promise<Content>
+    #{abstract} _genDescr(prop: OpenAPIV3.SchemaObject): Promise<Content>
+    #{abstract} _genRequired(required: boolean): Promise<Content>
+    +{abstract} genProp(prop: OpenAPIV3.SchemaObject, required: boolean): Promise<Content>
+}
+class DescriptionBuilder extends DescriptionBuilderBase {
+    #_genReadOrWrite(prop: OpenAPIV3.SchemaObject): Promise<Content>
+    #_genConstraints(prop: OpenAPIV3.SchemaObject): Promise<Content>
+    #_genDefault(prop: OpenAPIV3.SchemaObject): Promise<Content>
+    #_genPattern(prop: OpenAPIV3.SchemaObject): Promise<Content>
+    #_genName(prop: OpenAPIV3.SchemaObject): Promise<Content>
+    #_genDescr(prop: OpenAPIV3.SchemaObject): Promise<Content>
+    #_genEnum(prop: OpenAPIV3.SchemaObject): Promise<Content>
+    #_genRequired(required: boolean): Promise<Content>
+    +genProp(prop: OpenAPIV3.SchemaObject, required: boolean): Promise<Content>
+    +genType(prop: OpenAPIV3.SchemaObject): Promise<string>
+}
+abstract class MediaTreeBuilderBase {
+    #_descriptionBuilder: DescriptionBuilder
+    #_localize: Localize
+    #_pdfStyle: PdfStyle
+    #{abstract} _genKeyDef(obj: OpenAPIV3.SchemaObject, openapi: OpenapiInfoV3, prevKey: string): Promise<Content>
+    #{abstract} _getSchemaObj(obj: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, openapi: OpenapiInfoV3): Promise<OpenAPIV3.SchemaObject>
+    #{abstract} _genTree(obj: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, openapi: OpenapiInfoV3, prevKey?: string | undefined, required?: boolean | undefined): Promise<Content>
+    +{abstract} build(obj: OpenAPIV3.MediaTypeObject, openapi: OpenapiInfoV3, required: boolean): Promise<Content>
+}
+class MediaTreeBuilder extends MediaTreeBuilderBase {
+    #_genKeyDef(obj: OpenAPIV3.SchemaObject, openapi: OpenapiInfoV3, prevKey: string): Promise<Content>
+    #_getSchemaObj(obj: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, openapi: OpenapiInfoV3): Promise<OpenAPIV3.SchemaObject>
+    #_genTree(obj: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, openapi: OpenapiInfoV3, prevKey?: string, required?: boolean): Promise<Content>
+    +build(obj: OpenAPIV3.MediaTypeObject, openapi: OpenapiInfoV3): Promise<Content>
+}
+abstract class RequestBuilderBase {
+    #_localize: Localize
+    #_pdfStyle: PdfStyle
+    #_exampleBuilder: ExampleBuilder
+    #_mediaTreeBuilder: MediaTreeBuilder
+    #{abstract} _genHeader(): Promise<Content>
+    #{abstract} _genInfo(requestBody: OpenAPIV3.RequestBodyObject, openapi: OpenapiInfoV3): Promise<Content>
+    +{abstract} genDef(requestBody: OpenAPIV3.RequestBodyObject, openapi: OpenapiInfoV3): Promise<Content>
+}
+class RequestBuilder extends RequestBuilderBase {
+    #_genHeader(): Promise<Content>
+    #_genInfo(requestBody: OpenAPIV3.RequestBodyObject, openapi: OpenapiInfoV3): Promise<Content>
+    +genDef(requestBody: OpenAPIV3.RequestBodyObject, openapi: OpenapiInfoV3): Promise<Content>
+}
+abstract class ResponseBuilderBase {
+    #_localize: Localize
+    #_pdfStyle: PdfStyle
+    #_exampleBuilder: ExampleBuilder
+    #_mediaTreeBuilder: MediaTreeBuilder
+    #{abstract} _genHeader(code: string, response: OpenAPIV3.ResponseObject): Promise<Content>
+    #{abstract} _genInfo(responseBody: OpenAPIV3.ResponseObject, openapi: OpenapiInfoV3): Promise<Content>
+    +{abstract} genResponse(code: string, response: OpenAPIV3.ResponseObject, openapi: OpenapiInfoV3): Promise<Content>
+}
+class ResponseBuilder extends ResponseBuilderBase {
+    #_genHeader(code: string, response: OpenAPIV3.ResponseObject): Promise<Content>
+    #_genInfo(responseBody: OpenAPIV3.ResponseObject, openapi: OpenapiInfoV3): Promise<Content>
+    +genResponse(code: string, response: OpenAPIV3.ResponseObject, openapi: OpenapiInfoV3): Promise<Content>
+}
+abstract class ResponsesBuilderBase {
+    #_localize: Localize
+    #_pdfStyle: PdfStyle
+    #_responseBuilder: ResponseBuilder
+    #{abstract} _genHeader(): Promise<Content>
+    +{abstract} genDef(responses: OpenAPIV3.ResponsesObject, openapi: OpenapiInfoV3): Promise<Content>
+}
+class ResponsesBuilder extends ResponsesBuilderBase {
+    #_genHeader(): Promise<Content>
+    +genDef(responses: OpenAPIV3.ResponsesObject, openapi: OpenapiInfoV3): Promise<Content>
+}
+abstract class PathParamsBuilderBase {
+    #_localize: Localize
+    #_pdfStyle: PdfStyle
+    #{abstract} _genHeader(): Promise<Content>
+    #{abstract} _getParam(param: OpenAPIV3.ReferenceObject | OpenAPIV3.ParameterObject, opeanapi: OpenapiInfoV3): Promise<OpenAPIV3.ParameterObject>
+    #{abstract} _getSchemaObj(obj: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, openapi: OpenapiInfoV3): Promise<OpenAPIV3.SchemaObject>
+    #{abstract} _genTableContent(operationObj: OperationObjectWithPath, openapi: OpenapiInfoV3): Promise<Content>
+    +{abstract} genDef(operationObj: OperationObjectWithPath, openapi: OpenapiInfoV3): Promise<Content>
+}
+class PathParamsBuilder extends PathParamsBuilderBase {
+    #_genHeader(): Promise<Content>
+    #_getParam(param: OpenAPIV3.ReferenceObject | OpenAPIV3.ParameterObject, opeanapi: OpenapiInfoV3): Promise<OpenAPIV3.ParameterObject>
+    #_getSchemaObj(obj: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, openapi: OpenapiInfoV3): Promise<OpenAPIV3.SchemaObject>
+    #_genTableContent(operationObj: OperationObjectWithPath, openapi: OpenapiInfoV3): Promise<Content>
+    +genDef(operationObj: OperationObjectWithPath, openapi: OpenapiInfoV3): Promise<Content>
+}
+abstract class PathBuilderBase {
+    #_localize: Localize
+    #_pdfStyle: PdfStyle
+    #_header: Content[]
+    #_description: Content
+    #_pathParams: Content
+    #_request: Content
+    #_responses: Content
+    #_requestBuilder: RequestBuilder
+    #_responsesBuilder: ResponsesBuilder
+    #_pathParamsBuilder: PathParamsBuilder
+    #{abstract} _genHeader(tagSeq: number, methodSeq: number, operationObject: OperationObjectWithPath): Promise<Content[]>
+    #{abstract} _genDescription(operationObject: OperationObjectWithPath): Promise<Content>
+    #{abstract} _genPathParams(operationObject: OperationObjectWithPath, openapi: OpenapiInfoV3): Promise<Content>
+    #{abstract} _genRequest(operationObject: OperationObjectWithPath, openapi: OpenapiInfoV3): Promise<Content>
+    #{abstract} _genResponses(operationObject: OperationObjectWithPath, openapi: OpenapiInfoV3): Promise<Content>
+    #{abstract} _buildContent(tagSeq: number, methodSeq: number, operationObject: OperationObjectWithPath, openapi: OpenapiInfoV3): Promise<void>
+    +{abstract} genPath(tagSeq: number, methodSeq: number, operationObject: OperationObjectWithPath, openapi: OpenapiInfoV3): Promise<Content>
+}
+class PathBuilder extends PathBuilderBase {
+    #_genHeader(tagSeq: number, methodSeq: number, operationObject: OperationObjectWithPath): Promise<Content[]>
+    #_genDescription(operationObject: OperationObjectWithPath): Promise<Content>
+    #_genPathParams(operationObject: OperationObjectWithPath, openapi: OpenapiInfoV3): Promise<Content>
+    #_genRequest(operationObject: OperationObjectWithPath, openapi: OpenapiInfoV3): Promise<Content>
+    #_genResponses(operationObject: OperationObjectWithPath, openapi: OpenapiInfoV3): Promise<Content>
+    #_buildContent(tagSeq: number, methodSeq: number, operationObject: OperationObjectWithPath, openapi: OpenapiInfoV3): Promise<void>
+    +genPath(tagSeq: number, methodSeq: number, operationObject: OperationObjectWithPath, openapi: OpenapiInfoV3): Promise<Content>
+}
+abstract class PathsTagBuilderBase {
+    #_localize: Localize
+    #_pdfStyle: PdfStyle
+    #_pathBuilder: PathBuilder
+    #{abstract} _genHeader(tag: string, tagSeq: number): Promise<Content>
+    #{abstract} _genDescription(tag: string, openapi: OpenapiInfoV3): Promise<Content>
+    +{abstract} genTag(tag: string, tagSeq: number, operationObjects: OperationObjectWithPath[], openapi: OpenapiInfoV3): Promise<Content>
+}
+class PathsTagBuilder extends PathsTagBuilderBase {
+    #_genHeader(tag: string, tagSeq: number): Promise<Content>
+    #_genDescription(tag: string, openapi: OpenapiInfoV3): Promise<Content>
+    -_getTagInfo(tag: string, openapi: OpenapiInfoV3): Promise<OpenAPIV3.TagObject>
+    +genTag(tag: string, tagSeq: number, operationObjects: OperationObjectWithPath[], openapi: OpenapiInfoV3): Promise<Content>
+}
+class PdfPartPaths extends PdfPartProcessor {
+    #_genHeader(localize: Localize): Promise<Content>
+    +genDef(openapiTree: OpenapiInfoV3, localize: Localize, includeExample?: boolean | undefined): Promise<Content>
+}
+class PdfPartSecurity extends PdfPartProcessor {
+    -_genTableContent(openapiTree: OpenapiInfoV3, localize: Localize, includeExample?: boolean | undefined): Promise<Content[]>
+    +genDef(openapiTree: OpenapiInfoV3, localize: Localize, includeExample?: boolean | undefined): Promise<Content>
+}
+class PdfPartSecurityEmpty extends PdfPartProcessor {
+    +genDef(openapiTree: OpenapiInfoV3, localize: Localize, includeExample?: boolean | undefined): Promise<Content>
+}
+class PdfPartToc extends PdfPartProcessor {
+    +genDef(openapiTree: OpenapiInfoV3, localize: Localize, includeExample?: boolean | undefined): Promise<Content>
+}
+abstract class PdfPartBuilderBase {
+    #_localization: Localize
+    #_pdfStyle: PdfStyle
+    #_pdfParts: PdfPartProcessor[]
+    #_openapiInfo: OpenapiInfoV3
+    #_includeExamples: boolean | undefined
+    +{abstract} buildParts(apiPath: string | OpenAPI.Document<{}>): Promise<Content>
+    +{abstract} addPart(part: PdfPartProcessor): Promise<void>
+    +{abstract} addParts(parts: PdfPartProcessor[]): Promise<void>
+    +{abstract} cleanParts(): Promise<void>
+}
+class PdfPartBuilder extends PdfPartBuilderBase {
+    +buildParts(apiPath: string | OpenAPI.Document<{}>): Promise<Content>
+    +addPart(part: PdfPartProcessor): Promise<void>
+    +addParts(parts: PdfPartProcessor[]): Promise<void>
+    +cleanParts(): Promise<void>
+}
+class PDFDoc {
+    -_pdfPartsBuilder: PdfPartBuilder
+    -_allContent: Content
+    -_styles: PdfStyle
+    -_options: PdfOptions
+    -_documentDef: TDocumentDefinitions
+    -_doc: TCreatedPdf
+    -_footer(currentPage: number, pageCount: number): Content
+    +build(api: string | OpenAPI.Document<{}>): Promise<PDFDoc>
+    +writeToFile(filePath: string): Promise<void>
+}
+class DocGeneratorPDF {
+    -_pdfStyle: PdfStyle
+    -_pdfOptions: PdfOptions
+    -_pdfDoc: PDFDoc
+    +pdfStyles: PdfStyle
+    +createPdf(api: string | OpenAPI.Document<{}>): Promise<PDFDoc>
+    +writeToFile(pdfDocument: PDFDoc, file: string): Promise<void>
+    +createPdfAndWriteToFile(api: string | OpenAPI.Document<{}>, file: string): Promise<void>
+}
+class OpenapiInfoV3 {
+    -_api: OpenAPIV3.Document<{}>
+    -_components: OpenAPIV3.ComponentsObject
+    -_info: OpenAPIV3.InfoObject
+    -_openapi: string
+    -_paths: Record<string, OpenAPIV3.PathItemObject<{}>>
+    -_tagsToPaths: Record<string, OperationObjectWithPath[]>
+    -_genComponents(): Promise<OpenAPIV3.ComponentsObject>
+    -_genInfo(): Promise<OpenAPIV3.InfoObject>
+    -_genOpenapi(): Promise<string>
+    -_genPaths(): Promise<Record<string, OpenAPIV3.PathItemObject<{}>>>
+    +api: OpenAPIV3.Document<{}>
+    +info: OpenAPIV3.InfoObject
+    +components: OpenAPIV3.ComponentsObject
+    +openapi: string
+    +paths: Record<string, OpenAPIV3.PathItemObject<{}>>
+    +tagsToPaths: Record<string, OperationObjectWithPath[]>
+    -_genTagsToPaths(paths: Record<string, OpenAPIV3.PathItemObject<{}>>): Promise<Record<string, OperationObjectWithPath[]>>
+    +parse(apiPath: string | OpenAPI.Document<{}>): Promise<void>
+    +build(): Promise<void>
+    +parseAndBuild(apiPath: string | OpenAPI.Document<{}>): Promise<void>
+}
+@enduml
