@@ -109,3 +109,5 @@ files
 .DS_Store
 
 docsDist
+
+lib/utils/*.png
