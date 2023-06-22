@@ -1,6 +1,6 @@
 {
-  "name": "openapi2pdf",
-  "version": "0.1.0",
+  "name": "ravagepdf",
+  "version": "0.1.6",
   "description": "PDF generation from OpenAPI / Swagger Spec",
   "keywords": [
     "OpenAPI",
@@ -18,7 +18,6 @@
     "swagger pdf",
     "openapi pdf"
   ],
-  "main": "index.js",
   "scripts": {
     "predeploy": "npm run build && npm run build-docs",
     "deploy": "gh-pages -d docsDist",
@@ -31,18 +30,18 @@
     "build-docs": "typedoc --out docsDist ./lib/**/*"
   },
   "bin": {
-    "openapi2pdf": "dist/bin/cli.js"
+    "ravagepdf": "dist/bin/cli.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MBHuman/openapi2pdf.git"
+    "url": "git+https://github.com/MBHuman/ravagepdf.git"
   },
   "author": "Evgeny Dmitirev zenka712@mail.ru",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/MBHuman/openapi2pdf/issues"
+    "url": "https://github.com/MBHuman/ravagepdf/issues"
   },
-  "homepage": "https://github.com/MBHuman/openapi2pdf#readme",
+  "homepage": "https://mbhuman.github.io/ravagepdf",
   "devDependencies": {
     "@types/html-to-pdfmake": "^2.4.0",
     "@types/jest": "^29.5.0",
@@ -73,6 +72,7 @@
     "marked": "^4.3.0",
     "openapi-types": "^12.1.0",
     "pdfkit": "^0.13.0",
-    "pdfmake": "^0.2.2"
+    "pdfmake": "^0.2.2",
+    "yargs": "^17.0.24"
   }
 }

@@ -1,8 +1,8 @@
-# openapi2pdf
+# ravagepdf
 
 ## Introduction
 
-Openapi2pdf is a cli, with you can easily convert your openapi.json or openapi.yml specs from URL or from file to PDF with simple command. It takes few seconds to generate file. All methods are async, and can be used async within projects for async PDF generation.
+Ravagepdf is a cli, with you can easily convert your openapi.json or openapi.yml specs from URL or from file to PDF with simple command. It takes few seconds to generate file. All methods are async, and can be used async within projects for async PDF generation.
 
 ## Features
 
@@ -19,10 +19,16 @@ Openapi2pdf is a cli, with you can easily convert your openapi.json or openapi.y
 
 ## Examples of usage
 
+### Installation
+
+```console
+npm i -g ravagepdf
+```
+
 ### Example with URL
 
 ```console
-openapi2pdf -s https://app.swaggerhub.com/apiproxy/registry/Direct_Wines/CartAPISuite/1.7.0\?resolved\=true\&flatten\=true\&pretty\=true -o pdfDocs.pdf
+ravagepdf -s https://app.swaggerhub.com/apiproxy/registry/Direct_Wines/CartAPISuite/1.7.0\?resolved\=true\&flatten\=true\&pretty\=true -o pdfDocs.pdf
 ```
 
 ### Example with file
@@ -30,35 +36,39 @@ openapi2pdf -s https://app.swaggerhub.com/apiproxy/registry/Direct_Wines/CartAPI
 #### JSON
 
 ```console
-openapi2pdf -s openapi.json -o pdfDocs.pdf
+ravagepdf -s openapi.json -o pdfDocs.pdf
 ```
 
 #### YML 
 
 ```console
 
-openapi2pdf -s openapi.yml -o pdfDocs.pdf
+ravagepdf -s openapi.yml -o pdfDocs.pdf
 ```
 
 ## PDF examples
 
 ### Info
 
-![](./images/info.png)
+![](https://github.com/MBHuman/ravagepdf/blob/main/images/info.png)
 
 ### Index
 
-![](./images/index.png)
+![](https://github.com/MBHuman/ravagepdf/blob/main/images/index.png)
 
 ### Paths Header
 
-![](./images/paths_header.png)
+![](https://github.com/MBHuman/ravagepdf/blob/main/images/paths_header.png)
 
 ### Response Description
 
-![](./images/response_description.png)
+![](https://github.com/MBHuman/ravagepdf/blob/main/images/response_description.png)
 
 ### Example
 
-![](./images/example.png)
+![](https://github.com/MBHuman/ravagepdf/blob/main/images/example.png)
+
+### API List
+
+![](https://github.com/MBHuman/ravagepdf/blob/main/images/api_list.png)
 

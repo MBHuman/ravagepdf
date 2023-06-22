@@ -178,6 +178,8 @@ export class ExampleBuilder extends ExampleBuilderBase {
           schema.additionalProperties,
           openapi
         );
+      } else if (typeof schema.example !== "undefined") {
+        return schema.example;
       }
     } else {
       return schema.example ?
