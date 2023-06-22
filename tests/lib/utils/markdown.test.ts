@@ -1,4 +1,3 @@
-import axios from "axios";
 import {
   markdownToPdfmake,
   getImageFileName
@@ -8,8 +7,6 @@ import {
 const IMAGE_URL = "https://intmain.co/wp-content/uploads/circuit-breaker-closed-state.png";
 
 describe("markdownToPdfMake", () => {
-
-
 
   describe("test functionality to convert", () => {
     it("should convert markdown to pdfmake", async () => {
