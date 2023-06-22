@@ -1,4 +1,4 @@
-import { Content } from "pdfmake/interfaces";
+import { Content, Table } from "pdfmake/interfaces";
 import { Localize, PdfStyle } from "../types";
 import { OpenAPIV3 } from "openapi-types";
 import { OpenapiInfoV3 } from "../structures";
@@ -213,17 +213,20 @@ export class ExampleBuilder extends ExampleBuilderBase {
       return {} as Content;
     }
     const json = await this._genJsonString(obj.schema, openapi);
-    const content = [
-      { text: "", marginTop: 10 },
-    ] as Content[];
-    for (const el of json.split("\n")) {
-      const match = el.match(/^\s+/);
-      const count = match ? match[0].length : 0;
-      content.push({
-        text: el,
-        margin: [count * 5, 0, 0, 0]
-      });
-    }
-    return content;
+    return {
+      table: {
+        body: [[
+          {
+            border: [true, true, true, true],
+            fillColor: "#eeeeff",
+            text: json,
+            style: {
+              preserveLeadingSpaces: true
+            }
+          }
+        ]],
+        widths: "*",
+      } as Table
+    } as Content;
   }
 }
