@@ -1,3 +1,3 @@
 export * from "./localize";
-export * from "./pdfOptions";
-export * from "./pdfStyle";
+export * from "./options";
+export * from "./style";

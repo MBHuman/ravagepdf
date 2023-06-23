@@ -1,10 +1,11 @@
 import { OpenAPIV3 } from "openapi-types";
-import { Localize, PdfStyle } from "../types";
+import { RavageLocalizeEnum } from "../types";
 import { Content, ContentTable } from "pdfmake/interfaces";
 import {
   OpenapiInfoV3, OperationObjectWithPath,
   RowLinesTableLayout
 } from "../structures";
+import { IRavageOptions } from "../types/options";
 
 
 /**
@@ -13,12 +14,10 @@ import {
  */
 export abstract class PathParamsBuilderBase {
 
-  protected _localize: Localize;
-  protected _pdfStyle: PdfStyle;
+  protected _options?: IRavageOptions;
 
-  constructor(localize: Localize, pdfStyle: PdfStyle) {
-    this._localize = localize;
-    this._pdfStyle = pdfStyle;
+  constructor(options?: IRavageOptions) {
+    this._options = options;
   }
 
   /**
@@ -134,23 +133,28 @@ export class PathParamsBuilder extends PathParamsBuilderBase {
     const tableContent = [
       [
         {
-          text: this._localize.name,
+          text: this._options?.localize?.name ??
+            RavageLocalizeEnum.NAME,
           style: ["small", "b", "blue"]
         },
         {
-          text: this._localize.type,
+          text: this._options?.localize?.type ??
+            RavageLocalizeEnum.TYPE,
           style: ["small", "b", "blue"]
         },
         {
-          text: "REQUIRED",
+          text: this._options?.localize?.required ??
+            RavageLocalizeEnum.REQUIRED,
           style: ["small", "b", "blue"]
         },
         {
-          text: this._localize.example,
+          text: this._options?.localize?.example ??
+            RavageLocalizeEnum.EXAMPLE,
           style: ["small", "b", "blue"]
         },
         {
-          text: this._localize.description,
+          text: this._options?.localize?.description ??
+            RavageLocalizeEnum.DESCRIPTION,
           style: ["small", "b", "blue"]
         },
       ]

@@ -1,8 +1,9 @@
 import { Content, ContentStack } from "pdfmake/interfaces";
 import { PdfPartProcessor } from "./partProcessor";
 import { OpenapiInfoV3 } from "../structures";
-import { Localize } from "../types";
+import { RavageLocalizeEnum } from "../types";
 import { markdownToPdfmake } from "../utils/markdown";
+import { IRavageOptions } from "../types/options";
 
 /**
  * PdfPartInfo Content block for main page of pdf document
@@ -14,18 +15,21 @@ export class PdfPartInfo extends PdfPartProcessor {
    * Generates Content block with name from openapi file
    * 
    * @param openapiTree 
-   * @param localize 
+   * @param options 
    * @returns 
    */
   private async _genName(
     openapiTree: OpenapiInfoV3,
-    localize: Localize,
+    options?: IRavageOptions,
   ): Promise<Content> {
     let contactName = {} as Content;
     if (openapiTree.info.contact?.name) {
       contactName = {
         text: [
-          { text: `\n${localize.name}: `, style: ["b", "small"] },
+          {
+            text: `\n${options?.localize?.name ??
+              RavageLocalizeEnum.NAME}: `, style: ["b", "small"]
+          },
           { text: openapiTree.info.contact?.name, style: ["small"] },
         ],
       } as Content;
@@ -44,13 +48,16 @@ export class PdfPartInfo extends PdfPartProcessor {
    */
   private async _genEmail(
     openapiTree: OpenapiInfoV3,
-    localize: Localize,
+    options?: IRavageOptions,
   ): Promise<Content> {
     let contactEmail = {} as Content;
     if (openapiTree.info.contact?.email) {
       contactEmail = {
         text: [
-          { text: `\n${localize.email}: `, style: ["b", "small"] },
+          {
+            text: `\n${options?.localize?.email ??
+              RavageLocalizeEnum.EMAIL}: `, style: ["b", "small"]
+          },
           { text: openapiTree.info.contact?.email, style: ["small"] },
         ],
       } as Content;
@@ -69,7 +76,7 @@ export class PdfPartInfo extends PdfPartProcessor {
    */
   private async _genUrl(
     openapiTree: OpenapiInfoV3,
-    localize: Localize,
+    options?: IRavageOptions
   ): Promise<Content> {
     let contactUrl = {} as Content;
 
@@ -77,7 +84,7 @@ export class PdfPartInfo extends PdfPartProcessor {
       contactUrl = {
         text: [
           {
-            text: `\n${localize.url}: `,
+            text: `\n${options?.localize?.url ?? RavageLocalizeEnum.URL}: `,
             style: ["b", "small"]
           },
           {
@@ -102,14 +109,15 @@ export class PdfPartInfo extends PdfPartProcessor {
    */
   private async _genTermsOfService(
     openapiTree: OpenapiInfoV3,
-    localize: Localize,
+    options?: IRavageOptions
   ): Promise<Content> {
     let termsOfService = {} as Content;
     if (openapiTree.info.termsOfService) {
       termsOfService = {
         text: [
           {
-            text: `\n${localize.termsOfService}: `,
+            text: `\n${options?.localize?.termsOfService
+              ?? RavageLocalizeEnum.TERMS_OF_SERVICE}: `,
             style: ["b", "small"]
           },
           {
@@ -159,15 +167,13 @@ export class PdfPartInfo extends PdfPartProcessor {
    */
   private async _genContact(
     openapiTree: OpenapiInfoV3,
-    localize: Localize,
-    // eslint-disable-next-line no-unused-vars
-    includeExample?: boolean
+    options?: IRavageOptions
   ): Promise<Content> {
     const contactDef: Content = [
-      await this._genName(openapiTree, localize),
-      await this._genEmail(openapiTree, localize),
-      await this._genUrl(openapiTree, localize),
-      await this._genTermsOfService(openapiTree, localize),
+      await this._genName(openapiTree, options),
+      await this._genEmail(openapiTree, options),
+      await this._genUrl(openapiTree, options),
+      await this._genTermsOfService(openapiTree, options),
     ];
     return new Promise((resolve) => {
       resolve(contactDef);
@@ -176,19 +182,18 @@ export class PdfPartInfo extends PdfPartProcessor {
 
   async genDef(
     openapiTree: OpenapiInfoV3,
-    localize: Localize,
-    includeExample?: boolean
+    options?: IRavageOptions
   ): Promise<Content> {
     const contactDef = await this._genContact(
       openapiTree,
-      localize,
-      includeExample
+      options
     ) as Content[];
     const version = openapiTree.api.info.version;
     const infoVersion = openapiTree.info.title;
     const content: Content = [
       {
-        text: localize.apiReference,
+        text: options?.localize?.apiReference ??
+          RavageLocalizeEnum.API_REFERENCE,
         style: ["h2", "primary", "right", "b", "topMargin1"]
       },
       openapiTree.info.title ? {
@@ -217,13 +222,12 @@ export class PdfPartInfoEmpty extends PdfPartProcessor {
 
   async genDef(
     openapiTree: OpenapiInfoV3,
-    localize: Localize,
-    // eslint-disable-next-line no-unused-vars
-    includeExample?: boolean
+    options?: IRavageOptions
   ): Promise<Content> {
     const content: Content = [
       {
-        text: localize.apiReference,
+        text: options?.localize?.apiReference ??
+          RavageLocalizeEnum.API_REFERENCE,
         style: ["h1", "bold", "primary", "right", "topMargin1"]
       },
       {

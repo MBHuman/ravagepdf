@@ -1,8 +1,9 @@
 import { Content } from "pdfmake/interfaces";
 import { OpenapiInfoV3 } from "../structures";
-import { Localize, PdfStyle } from "../types";
 import { PdfPartProcessor } from "./partProcessor";
 import { PathsTagBuilder } from "./pathsTagBuilder";
+import { IRavageOptions } from "../types/options";
+import { RavageLocalizeEnum } from "../types";
 
 /**
  * PdfPartPaths is PdfPart for PdfPartBuilder that can
@@ -16,20 +17,18 @@ export class PdfPartPaths extends PdfPartProcessor {
    * @param localize 
    * @returns 
    */
-  protected async _genHeader(localize: Localize): Promise<Content> {
+  protected async _genHeader(options?: IRavageOptions): Promise<Content> {
     return {
-      text: localize.api,
+      text: options?.localize?.api ?? RavageLocalizeEnum.API,
       style: ["h2", "b"]
     } as Content;
   }
 
   public async genDef(
     openapiTree: OpenapiInfoV3,
-    localize: Localize,
-    // eslint-disable-next-line no-unused-vars
-    includeExample?: boolean
+    options?: IRavageOptions
   ): Promise<Content> {
-    const pathsTagBuilder = new PathsTagBuilder(localize, {} as PdfStyle);
+    const pathsTagBuilder = new PathsTagBuilder(options);
     const tagsPaths = [] as Content[];
     let tagSeq = 1;
     for (const [tag, paths] of Object.entries(openapiTree.tagsToPaths)) {
@@ -40,7 +39,7 @@ export class PdfPartPaths extends PdfPartProcessor {
     }
 
     const content = [
-      await this._genHeader(localize),
+      await this._genHeader(options),
       tagsPaths
     ];
     return content;

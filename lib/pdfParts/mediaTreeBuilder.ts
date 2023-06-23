@@ -1,8 +1,8 @@
 import { OpenAPIV3 } from "openapi-types";
 import { Content, ContentStack } from "pdfmake/interfaces";
 import { DescriptionBuilder } from "./descriptionBuilder";
-import { Localize, PdfStyle } from "../types";
 import { OpenapiInfoV3 } from "../structures";
+import { IRavageOptions } from "../types/options";
 
 /**
  * MediaTreeBuilderBase generates HTTP Body information from
@@ -14,15 +14,12 @@ import { OpenapiInfoV3 } from "../structures";
 export abstract class MediaTreeBuilderBase {
 
   protected _descriptionBuilder: DescriptionBuilder;
-  protected _localize: Localize;
-  protected _pdfStyle: PdfStyle;
+  protected _options?: IRavageOptions;
 
-  constructor(localize: Localize, pdfStyle: PdfStyle) {
-    this._localize = localize;
-    this._pdfStyle = pdfStyle;
+  constructor(options?: IRavageOptions) {
+    this._options = options;
     this._descriptionBuilder = new DescriptionBuilder(
-      localize,
-      pdfStyle
+      this._options
     );
   }
 

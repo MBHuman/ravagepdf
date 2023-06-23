@@ -1,7 +1,7 @@
 import { Content, Table } from "pdfmake/interfaces";
-import { Localize, PdfStyle } from "../types";
 import { OpenAPIV3 } from "openapi-types";
 import { OpenapiInfoV3 } from "../structures";
+import { IRavageOptions } from "../types/options";
 
 /**
  * ExampleBuilder generates examples from OpenAPIV3.ReferenceObject
@@ -23,15 +23,12 @@ import { OpenapiInfoV3 } from "../structures";
  */
 export abstract class ExampleBuilderBase {
 
-  protected _localize: Localize;
-  protected _pdfStyle: PdfStyle;
+  protected _options?: IRavageOptions;
 
   constructor(
-    localize: Localize,
-    pdfStyle: PdfStyle
+    options?: IRavageOptions
   ) {
-    this._localize = localize;
-    this._pdfStyle = pdfStyle;
+    this._options = options;
   }
 
   /**
@@ -119,6 +116,9 @@ export class ExampleBuilder extends ExampleBuilderBase {
   ): Promise<object> {
     const schema = await this._getSchemaObj(obj, openapi);
     const res = {} as { [key: string]: any };
+    if (typeof schema.example !== "undefined") {
+      return schema.example;
+    }
     if (!schema.type) {
       if (schema.anyOf && schema.anyOf.length > 0) {
         return this._buildObj(schema.anyOf[0], openapi);
@@ -135,6 +135,10 @@ export class ExampleBuilder extends ExampleBuilderBase {
       if (schema.properties) {
         for (const [name, prop] of Object.entries(schema.properties)) {
           const schemaProp = await this._getSchemaObj(prop, openapi);
+          if(typeof schemaProp.example !== "undefined") {
+            res[name] = schemaProp.example;
+            continue;
+          }
           if (schemaProp.type &&
             schemaProp.type !== "array" &&
             schemaProp.type !== "object"
@@ -178,8 +182,6 @@ export class ExampleBuilder extends ExampleBuilderBase {
           schema.additionalProperties,
           openapi
         );
-      } else if (typeof schema.example !== "undefined") {
-        return schema.example;
       }
     } else {
       return schema.example ?

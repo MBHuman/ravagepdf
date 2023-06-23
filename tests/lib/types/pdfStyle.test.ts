@@ -1,7 +1,8 @@
-import { PdfStyle } from ".../../../lib/types/pdfStyle";
+import { StyleDictionary } from "pdfmake/interfaces";
+
 
 describe("PdfStyle type", () => {
-  let pdfStyle: PdfStyle;
+  let pdfStyle: StyleDictionary;
 
   beforeAll(() => {
     pdfStyle = {

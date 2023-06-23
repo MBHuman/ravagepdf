@@ -1,18 +1,17 @@
 import { Content } from "pdfmake/interfaces";
-import { Localize, PdfStyle } from "../types";
+import { RavageLocalizeEnum } from "../types";
 import { OpenAPIV3 } from "openapi-types";
+import { IRavageOptions } from "../types/options";
 
 /**
  * DescriptionBuilder is class that can generate description Content blocks
  * for MediaTreeBuilder by OpenAPIV3.SchemaObject
  */
 export abstract class DescriptionBuilderBase {
-  protected _localize: Localize;
-  protected _pdfStyle: PdfStyle;
+  protected _options?: IRavageOptions;
 
-  constructor(localize: Localize, pdfStyle: PdfStyle) {
-    this._localize = localize;
-    this._pdfStyle = pdfStyle;
+  constructor(options?: IRavageOptions) {
+    this._options = options;
   }
 
   /**
@@ -132,7 +131,10 @@ export class DescriptionBuilder extends DescriptionBuilderBase {
     return {
       text: [
         {
-          text: `${this._localize.default}: `,
+          text: `${
+            this._options?.localize?.default ?? 
+            RavageLocalizeEnum.DEFAULT
+          }: `,
           style: ["sub", "b", "darkGray"]
         },
         { text: prop.default ?? "", style: ["small", "darkGray", "mono"] },
@@ -145,7 +147,9 @@ export class DescriptionBuilder extends DescriptionBuilderBase {
   ): Promise<Content> {
     return {
       text: [
-        { text: `${this._localize.pattern}:`, style: ["sub", "b", "darkGray"] },
+        { text: `${
+          this._options?.localize?.pattern ?? 
+          RavageLocalizeEnum.PATTERN}:`, style: ["sub", "b", "darkGray"] },
         { text: prop.pattern ?? "", style: ["small", "lightGray", "mono"] },
       ],
     } as Content;
@@ -180,7 +184,8 @@ export class DescriptionBuilder extends DescriptionBuilderBase {
       return {
         text: [
           {
-            text: `${this._localize.allowed}: `,
+            text: `${this._options?.localize?.allowed ?? 
+              RavageLocalizeEnum.ALLOWED}: `,
             style: ["sub", "b", "darkGray"]
           },
           {

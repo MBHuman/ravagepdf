@@ -1,6 +1,6 @@
 # ravagepdf
 
-Check coverage
+Check coverage 2
 
 ## Introduction
 
@@ -74,3 +74,6 @@ ravagepdf -s openapi.yml -o pdfDocs.pdf
 
 ![](https://github.com/MBHuman/ravagepdf/blob/main/images/api_list.png)
 
+## Program Design
+
+![](./images/ravage.svg)

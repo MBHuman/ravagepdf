@@ -1,6 +1,6 @@
 import { Content, ContentToc } from "pdfmake/interfaces";
 import { PdfPartProcessor } from "./partProcessor";
-import { Localize } from "../types";
+import { IRavageOptions, RavageLocalizeEnum } from "../types";
 import { OpenapiInfoV3 } from "../structures";
 
 
@@ -12,13 +12,14 @@ export class PdfPartToc extends PdfPartProcessor {
 
   async genDef(
     openapiTree: OpenapiInfoV3,
-    localize: Localize,
-    // eslint-disable-next-line no-unused-vars
-    includeExample?: boolean
+    options?: IRavageOptions
   ): Promise<Content> {
     const content = [{
       toc: {
-        title: { text: localize.index, style: ["b", "h2"] },
+        title: {
+          text: options?.localize?.index ??
+            RavageLocalizeEnum.INDEX, style: ["b", "h2"]
+        },
         numberStyle: { bold: true },
         style: ["small"],
       },

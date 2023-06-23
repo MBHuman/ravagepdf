@@ -1,28 +1,26 @@
 import { OpenAPI } from "openapi-types";
-import { PdfOptions } from "../types";
-import { PdfStyle } from "../types/pdfStyle";
 import { PDFDoc } from "./pdfDoc";
+import { IRavageOptions } from "../types/options";
+import { StyleDictionary } from "pdfmake/interfaces";
 
 /**
  * Class to generate PDF from OpenAPI definition.
  */
 export class DocGeneratorPDF {
 
-  private _pdfStyle: PdfStyle;
-  private _pdfOptions: PdfOptions;
+  private _options: IRavageOptions;
   private _pdfDoc: PDFDoc;
 
-  constructor(pdfStyle: PdfStyle, pdfOptions: PdfOptions) {
-    this._pdfStyle = pdfStyle;
-    this._pdfOptions = pdfOptions;
-    this._pdfDoc = new PDFDoc(this._pdfStyle, this._pdfOptions);
+  constructor(options?: IRavageOptions) {
+    this._options = options ?? {};
+    this._pdfDoc = new PDFDoc(this._options);
   }
 
   /**
    * setter for pdfStyles
    */
-  public set pdfStyles(style: PdfStyle) {
-    this._pdfStyle = style;
+  public set pdfStyles(style: StyleDictionary) {
+    this._options.style = style;
   }
 
   /**

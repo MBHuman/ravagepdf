@@ -1,8 +1,8 @@
 import { Content } from "pdfmake/interfaces";
 import { PdfPartProcessor } from "./partProcessor";
-import { Localize, PdfStyle } from "../types";
 import { OpenapiInfoV3 } from "../structures";
 import { OpenAPI } from "openapi-types";
+import { IRavageOptions } from "../types/options";
 
 
 /**
@@ -24,11 +24,9 @@ import { OpenAPI } from "openapi-types";
  */
 export abstract class PdfPartBuilderBase {
 
-  protected _localization: Localize;
-  protected _pdfStyle: PdfStyle;
   protected _pdfParts: PdfPartProcessor[];
   protected _openapiInfo: OpenapiInfoV3;
-  protected _includeExamples: boolean | undefined;
+  protected _options?: IRavageOptions;
 
   /**
    * 
@@ -40,15 +38,11 @@ export abstract class PdfPartBuilderBase {
    * examples to requests and responses in pdf
    */
   constructor(
-    localization: Localize,
-    pdfStyle: PdfStyle,
-    includeExamples?: boolean
+    options?: IRavageOptions
   ) {
-    this._localization = localization;
-    this._pdfStyle = pdfStyle;
     this._pdfParts = [];
     this._openapiInfo = new OpenapiInfoV3();
-    this._includeExamples = includeExamples;
+    this._options = options;
   }
   /**
    * Build all pdfParts and return array of them
@@ -153,8 +147,7 @@ export class PdfPartBuilder extends PdfPartBuilderBase {
     await this._openapiInfo.parseAndBuild(apiPath);
     const promises = this._pdfParts.map((part) => part.genDef(
       this._openapiInfo,
-      this._localization,
-      this._includeExamples,
+      this._options
     ));
     const contents = await Promise.all(promises);
     return contents;

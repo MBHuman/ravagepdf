@@ -1,27 +1,24 @@
 import { Content } from "pdfmake/interfaces";
-import { Localize, PdfStyle } from "../types";
+import { RavageLocalizeEnum } from "../types";
 import { OpenAPIV3 } from "openapi-types";
 import { ResponseBuilder } from "./responseBuilder";
 import { OpenapiInfoV3 } from "../structures";
+import { IRavageOptions } from "../types/options";
 
 /**
  * ResponsesBuilderBase builds responses Content
  * blocks for PathsTagBuilderBase
  */
 export abstract class ResponsesBuilderBase {
-  protected _localize: Localize;
-  protected _pdfStyle: PdfStyle;
+  protected _options?: IRavageOptions;
   protected _responseBuilder: ResponseBuilder;
 
   constructor(
-    localize: Localize,
-    pdfStyle: PdfStyle
+    options?: IRavageOptions,
   ) {
-    this._localize = localize;
-    this._pdfStyle = pdfStyle;
+    this._options = options;
     this._responseBuilder = new ResponseBuilder(
-      localize,
-      pdfStyle,
+      options
     );
   }
 
@@ -47,7 +44,8 @@ export abstract class ResponsesBuilderBase {
 export class ResponsesBuilder extends ResponsesBuilderBase {
   protected async _genHeader(): Promise<Content> {
     return {
-      text: this._localize.response,
+      text: this._options?.localize?.response ??
+        RavageLocalizeEnum.RESPONSES,
       style: ["p", "b", "alternate"],
       margin: [0, 10, 0, 0]
     } as Content;

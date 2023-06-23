@@ -1,33 +1,29 @@
 import { Content } from "pdfmake/interfaces";
-import { Localize, PdfStyle } from "../types";
+import { RavageLocalizeEnum } from "../types";
 import { OpenAPIV3 } from "openapi-types";
 import { ExampleBuilder } from "./exampleBuilder";
 import { MediaTreeBuilder } from "./mediaTreeBuilder";
 import { OpenapiInfoV3 } from "../structures";
+import { IRavageOptions } from "../types/options";
 
 /**
  * RequestBuilderBase generates request information block with
  * header, description, path params, body schema and examples
  */
 export abstract class RequestBuilderBase {
-  protected _localize: Localize;
-  protected _pdfStyle: PdfStyle;
+  protected _options?: IRavageOptions;
   protected _exampleBuilder: ExampleBuilder;
   protected _mediaTreeBuilder: MediaTreeBuilder;
 
   constructor(
-    localize: Localize,
-    pdfStyle: PdfStyle
+    options?: IRavageOptions
   ) {
-    this._localize = localize;
-    this._pdfStyle = pdfStyle;
+    this._options = options;
     this._exampleBuilder = new ExampleBuilder(
-      localize,
-      pdfStyle,
+      this._options,
     );
     this._mediaTreeBuilder = new MediaTreeBuilder(
-      localize,
-      pdfStyle
+      this._options,
     );
   }
 
@@ -69,7 +65,7 @@ export class RequestBuilder extends RequestBuilderBase {
 
   protected async _genHeader(): Promise<Content> {
     return {
-      text: this._localize.request,
+      text: this._options?.localize?.request ?? RavageLocalizeEnum.REQUEST,
       style: ["p", "b", "alternate"],
       margin: [0, 10, 0, 0]
     } as Content;
@@ -86,13 +82,15 @@ export class RequestBuilder extends RequestBuilderBase {
     for (const [type, mediaObject] of Object.entries(requestBody.content)) {
       content.push([
         {
-          text: `${this._localize.requestBody} - ${type}`,
+          text: `${this._options?.localize?.requestBody ??
+            RavageLocalizeEnum.REQUEST_BODY} - ${type}`,
           margin: [0, 10, 0, 0],
           style: ["small", "b"]
         },
         await this._mediaTreeBuilder.build(mediaObject, openapi),
         {
-          text: this._localize.example,
+          text: this._options?.localize?.example ??
+            RavageLocalizeEnum.EXAMPLE,
           margin: [0, 10, 0, 0],
           style: ["small", "b", "blue"]
         },
