@@ -22,8 +22,13 @@ Key moments:
 - Localization
 - OpenAPIStructure
 - Structure
+- Storage
 - TextComponent
 - TextExtensionsComposite
 - PDFStyle
 - Style
 - Markdown
+- Fonts
+- PDFTemplateStrategy
+
+![](../images/modules.svg)

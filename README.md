@@ -77,3 +77,8 @@ ravagepdf -s openapi.yml -o pdfDocs.pdf
 ## Program Design
 
 ![](./images/ravage.svg)
+
+## Lib diagram
+
+
+![](./images/lib_diagram.png)

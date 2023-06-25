@@ -1,6 +1,6 @@
 {
   "name": "ravagepdf",
-  "version": "0.1.7",
+  "version": "0.2.0",
   "description": "PDF generation from OpenAPI / Swagger Spec",
   "keywords": [
     "OpenAPI",

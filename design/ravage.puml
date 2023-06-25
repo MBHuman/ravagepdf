@@ -1,5 +1,4 @@
 @startuml
-left to right direction
 class RowLinesTableLayout implements CustomTableLayout {
     +hLineWidth(i: number, node: ContentTable): number
     +vLineWidth(): number
@@ -9,6 +8,7 @@ interface IRavageOptions {
     +localize?: IRavageLocalize | undefined
     +style?: StyleDictionary | undefined
     +examples?: IRavageExamples | undefined
+    +structure?: IRavageStructure | undefined
 }
 interface IRavageExamples {
     +includeRequestExamples?: boolean | undefined
@@ -47,6 +47,21 @@ interface IRavageLocalize {
     +noRequestParameters?: string | undefined
     +method?: string | undefined
     +required?: string | undefined
+}
+interface IRavageStructure {
+    +pdfSortTags?: boolean | undefined
+    +pdfPrimaryColor?: string | undefined
+    +pdfTitle?: string | undefined
+    +pdfCoverText?: string | undefined
+    +pdfSecurityText?: string | undefined
+    +pdfApiText?: string | undefined
+    +pdfFooterText?: string | undefined
+    +includeInfo?: boolean | undefined
+    +includeToc?: boolean | undefined
+    +includeSecurity?: boolean | undefined
+    +includeExample?: boolean | undefined
+    +includeApiDetails?: boolean | undefined
+    +includeApiList?: boolean | undefined
 }
 abstract class PdfPartProcessorBase {
     +{abstract} genDef(openapiTree: OpenapiInfoV3, options?: IRavageOptions | undefined): Promise<Content>
